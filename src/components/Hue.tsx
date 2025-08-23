@@ -19,20 +19,14 @@ export const Hue: React.FC<HueProps> = ({
   onChange,
   className
 }) => {
-  console.log("🌈 Hue component rendering with hue:", hue);
-
   const handleMove = useCallback((interaction: Interaction) => {
-    const newHue = { h: 360 * interaction.left };
-    console.log("🌈 Hue handleMove:", newHue);
-    onChange(newHue);
+    onChange({ h: 360 * interaction.left });
   }, [onChange]);
 
   const handleKey = useCallback((offset: Interaction) => {
-    const newHue = {
+    onChange({
       h: clamp(hue + offset.left * 360, 0, 360),
-    };
-    console.log("🌈 Hue handleKey:", newHue);
-    onChange(newHue);
+    });
   }, [hue, onChange]);
 
   return (

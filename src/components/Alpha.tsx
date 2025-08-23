@@ -36,20 +36,14 @@ export const Alpha: React.FC<AlphaProps> = ({
   onChange,
   className
 }) => {
-  console.log("🔘 Alpha component rendering with alpha:", hsva.a);
-
   const handleMove = useCallback((interaction: Interaction) => {
-    const newAlpha = { a: interaction.left };
-    console.log("🔘 Alpha handleMove:", newAlpha);
-    onChange(newAlpha);
+    onChange({ a: interaction.left });
   }, [onChange]);
 
   const handleKey = useCallback((offset: Interaction) => {
-    const newAlpha = {
+    onChange({
       a: clamp(hsva.a + offset.left),
-    };
-    console.log("🔘 Alpha handleKey:", newAlpha);
-    onChange(newAlpha);
+    });
   }, [hsva.a, onChange]);
 
   const colorFrom = hsvaToHslaString({ ...hsva, a: 0 });
