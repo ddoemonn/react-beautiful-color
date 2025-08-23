@@ -16,7 +16,7 @@
     "motion": "^12.23.12",
     "next": "15.5.0",
     "react": "19.1.0",
-    "react-beautiful-color": "^1.0.2",
+    "react-beautiful-color": "^1.0.3",
     "react-dom": "19.1.0",
     "react-syntax-highlighter": "^15.6.3",
     "tailwind-merge": "^3.3.1"

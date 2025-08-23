@@ -21,12 +21,14 @@ npm install react-beautiful-color
 ## Usage
 
 **1. Add CSS to your layout file:**
+
 ```tsx
 // app/layout.tsx (Next.js) or pages/_app.tsx or index.tsx
 import 'react-beautiful-color/dist/react-beautiful-color.css';
 ```
 
 **2. Use the component:**
+
 ```tsx
 import { ColorPicker, useColorState } from 'react-beautiful-color';
 
