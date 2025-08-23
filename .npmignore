@@ -1,0 +1,42 @@
+# Source files (only dist should be published)
+src/
+*.ts
+*.tsx
+
+# Development files
+website/
+rollup.config.js
+tsconfig.json
+.eslintrc.json
+
+# Git
+.git/
+.gitignore
+
+# Node
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+logs/
+*.log
+
+# Testing
+coverage/
+.nyc_output/
+
+# Cache
+.eslintcache
+*.tsbuildinfo
