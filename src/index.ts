@@ -1,3 +1,6 @@
+// Import CSS styles
+import "./styles.css";
+
 export { ColorPicker } from "./components/ColorPicker";
 
 export { useColorState } from "./hooks/useColorState";
