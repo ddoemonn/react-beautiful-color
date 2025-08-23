@@ -119,6 +119,8 @@ const ColorPickerMain: React.FC<ColorPickerMainProps> = ({
     handleEyeDropper,
   };
 
+  console.log("🎨 ColorPicker Main rendering with hsva:", hsva);
+
   return (
     <ColorPickerContext.Provider value={contextValue}>
       <div
@@ -139,9 +141,11 @@ interface CompoundSaturationProps {
 }
 
 const CompoundSaturation: React.FC<CompoundSaturationProps> = ({ className }) => {
+  console.log("🟦 CompoundSaturation rendering!");
   const { hsva, updateHsva } = useColorPickerContext();
   
   const handleSaturationChange = useCallback((newColor: { s: number; v: number }) => {
+    console.log("🟦 Saturation change:", newColor);
     updateHsva(newColor);
   }, [updateHsva]);
   
@@ -159,9 +163,11 @@ interface CompoundHueProps {
 }
 
 const CompoundHue: React.FC<CompoundHueProps> = ({ className }) => {
+  console.log("🌈 CompoundHue rendering!");
   const { hsva, updateHsva } = useColorPickerContext();
   
   const handleHueChange = useCallback((newHue: { h: number }) => {
+    console.log("🌈 Hue change:", newHue);
     updateHsva(newHue);
   }, [updateHsva]);
   
@@ -179,9 +185,11 @@ interface CompoundAlphaProps {
 }
 
 const CompoundAlpha: React.FC<CompoundAlphaProps> = ({ className }) => {
+  console.log("🔘 CompoundAlpha rendering!");
   const { hsva, updateHsva } = useColorPickerContext();
   
   const handleAlphaChange = useCallback((newAlpha: { a: number }) => {
+    console.log("🔘 Alpha change:", newAlpha);
     updateHsva(newAlpha);
   }, [updateHsva]);
   
@@ -207,6 +215,7 @@ const CompoundEyeDropper: React.FC<CompoundEyeDropperProps> = ({
   title = "Pick color from screen",
   children 
 }) => {
+  console.log("👁️ CompoundEyeDropper rendering!");
   const { handleEyeDropper } = useColorPickerContext();
   
   return (

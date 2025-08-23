@@ -26,18 +26,24 @@ export const Saturation: React.FC<SaturationProps> = ({
   onChange,
   className
 }) => {
+  console.log("🟩 Saturation component rendering with hsva:", hsva);
+
   const handleMove = useCallback((interaction: Interaction) => {
-    onChange({
+    const newColor = {
       s: interaction.left * 100,
       v: 100 - interaction.top * 100,
-    });
+    };
+    console.log("🟩 Saturation handleMove:", newColor);
+    onChange(newColor);
   }, [onChange]);
 
   const handleKey = useCallback((offset: Interaction) => {
-    onChange({
+    const newColor = {
       s: clamp(hsva.s + offset.left * 100, 0, 100),
       v: clamp(hsva.v - offset.top * 100, 0, 100),
-    });
+    };
+    console.log("🟩 Saturation handleKey:", newColor);
+    onChange(newColor);
   }, [hsva.s, hsva.v, onChange]);
 
   const pureHue = `hsl(${hsva.h}, 100%, 50%)`;
