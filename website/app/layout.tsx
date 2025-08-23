@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Space_Grotesk, Inter, JetBrains_Mono, Orbitron, Pacifico } from "next/font/google";
 import "./globals.css";
+import "react-beautiful-color/dist/react-beautiful-color.css";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
