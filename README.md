@@ -22,6 +22,7 @@ npm install react-beautiful-color
 
 ```tsx
 import { ColorPicker, useColorState } from 'react-beautiful-color';
+import 'react-beautiful-color/dist/react-beautiful-color.css';
 
 function App() {
   const { color, setColor } = useColorState("#3b82f6");
