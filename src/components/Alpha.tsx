@@ -50,7 +50,7 @@ export const Alpha: React.FC<AlphaProps> = ({
   const colorTo = hsvaToHslaString({ ...hsva, a: 1 });
 
   return (
-    <div className={cn("relative w-full", className)}>
+    <div className={cn("relative w-full h-full", className)}>
       <Interactive
         onMove={handleMove}
         onKey={handleKey}

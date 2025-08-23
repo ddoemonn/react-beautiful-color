@@ -43,7 +43,7 @@ export const Saturation: React.FC<SaturationProps> = ({
   const pureHue = `hsl(${hsva.h}, 100%, 50%)`;
 
   return (
-    <div className={cn("relative w-full", className)}>
+    <div className={cn("relative w-full h-full", className)}>
       <Interactive
         onMove={handleMove}
         onKey={handleKey}

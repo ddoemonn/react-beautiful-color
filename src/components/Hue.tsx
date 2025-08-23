@@ -30,7 +30,7 @@ export const Hue: React.FC<HueProps> = ({
   }, [hue, onChange]);
 
   return (
-    <div className={cn("relative w-full", className)}>
+    <div className={cn("relative w-full h-full", className)}>
       <Interactive
         onMove={handleMove}
         onKey={handleKey}
