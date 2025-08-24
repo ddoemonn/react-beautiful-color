@@ -41,6 +41,11 @@
   ],
   "author": "ozergokalpsezer",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ddoemonn/react-beautiful-color"
+  },
+  "homepage": "https://react-beautiful-color.vercel.app",
   "peerDependencies": {
     "react": ">=16.8.0",
     "react-dom": ">=16.8.0",
