@@ -8,6 +8,7 @@ import { Palette, ArrowDown } from 'lucide-react';
 import { clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 import { ColorPicker, useColorState } from "react-beautiful-color";
+import { NPMIcon, GitHubIcon } from './components/Icons';
 
 const cn = (...inputs: unknown[]) => twMerge(clsx(inputs));
 
@@ -75,22 +76,48 @@ const App: React.FC = () => {
           </span>
         </h1>
         {!isScrollComplete && (
-        <div className="flex items-center justify-center gap-2 mt-4">
-          <Palette size={20} className="text-black opacity-70" />
-          <p className={`text-lg text-black opacity-80 underline-offset-4`}>
-            Scroll to craft your perfect color picker
-          </p>
-          <ArrowDown size={20} className="text-black opacity-70 mt-2 animate-bounce" />
-        </div>
+          <div className="flex flex-col items-center justify-center gap-3 mt-4">
+          <div className="flex items-center justify-center gap-2">
+            <Palette size={20} className="text-black opacity-70" />
+            <p className={`text-lg text-black opacity-80 underline-offset-4`}>
+              Scroll to craft your perfect color picker
+            </p>
+            <ArrowDown size={20} className="text-black opacity-70 mt-2 animate-bounce" />
+          </div>
+          </div>
         )}
+      
+        <div className="flex flex-col items-center justify-center gap-3 my-4">
+          {/* Header Links */}
+          <div className="flex items-center gap-4 mt-2">
+            <a 
+              href="https://github.com/ddoemonn/react-beautiful-color"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-black/5 hover:bg-black/10 transition-colors duration-200 text-sm font-medium text-black/70 hover:text-black"
+            >
+              <GitHubIcon size={16} />
+              <span>GitHub</span>
+            </a>
+            <a 
+              href="https://www.npmjs.com/package/react-beautiful-color"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-black/5 hover:bg-black/10 transition-colors duration-200 text-sm font-medium text-black/70 hover:text-black"
+            >
+              <NPMIcon size={16} />
+              <span>npm</span>
+            </a>
+          </div>
+        </div>
       </div>
 
       {/* Sticky/Fixed ColorPicker */}
       <div 
         className={`flex justify-center items-center pt-20 transition-all duration-500 ${
           isScrollComplete 
-            ? 'fixed top-18 left-0 right-0 z-40' 
-            : 'sticky top-32'
+            ? 'fixed top-24 left-0 right-0 z-40' 
+            : 'sticky top-36'
         }`}
       >
         <div className="relative  flex flex-col items-center justify-center">
