@@ -8,7 +8,7 @@ The most flexible and beautiful color picker for React. Built with compound comp
 
 - **🧩 Compound Components** - Compose your own layout, unlike rigid alternatives
 - **🎨 Beautiful Design** - Clean, modern UI that fits any design system
-- **⚡ Powerful Hook** - `useColorState` with all color formats instantly available
+- **⚡ Powerful Hook** - `useColorState` with all color formats instantly available and type-safe input
 - **🪶 Lightweight** - Pure Tailwind CSS, no external dependencies
 - **🛠️ Fully Customizable** - Style and arrange components however you want
 
@@ -62,8 +62,13 @@ console.log(color.hex);   // "#3b82f6"
 console.log(color.rgb);   // { r: 59, g: 130, b: 246 }
 console.log(color.hsl);   // { h: 217, s: 91, l: 60 }
 
-// Set any format
-setColor("#ff0000");
-setColor("rgb(255, 0, 0)");
-setColor("hsl(0, 100%, 50%)");
+// Set any format with complete type safety
+setColor({ type: 'hex', value: '#ff0000' });
+setColor({ type: 'rgb', r: 255, g: 0, b: 0 });
+setColor({ type: 'hsl', h: 0, s: 100, l: 50 });
+
+// With alpha support
+setColor({ type: 'rgba', r: 255, g: 0, b: 0, a: 0.5 });
+setColor({ type: 'hsla', h: 0, s: 100, l: 50, a: 0.8 });
+setColor({ type: 'hsva', h: 0, s: 100, v: 100, a: 0.9 });
 ```

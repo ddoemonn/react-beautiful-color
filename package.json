@@ -1,6 +1,6 @@
 {
   "name": "react-beautiful-color",
-  "version": "1.0.6",
+  "version": "1.8.0",
   "description": "Ultra-lightweight, beautiful color picker for React with compound components - minimal and extremely customizable",
   "main": "dist/index.js",
   "module": "dist/index.mjs",

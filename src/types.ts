@@ -43,9 +43,19 @@ export interface ColorState {
   alpha: number;
 }
 
+// Type-safe color input objects using discriminated unions
+export type ColorInput = 
+  | { type: 'hex'; value: string }
+  | { type: 'rgb'; r: number; g: number; b: number }
+  | { type: 'rgba'; r: number; g: number; b: number; a: number }
+  | { type: 'hsl'; h: number; s: number; l: number }
+  | { type: 'hsla'; h: number; s: number; l: number; a: number }
+  | { type: 'hsv'; h: number; s: number; v: number }
+  | { type: 'hsva'; h: number; s: number; v: number; a: number };
+
 export interface UseColorStateReturn {
   color: ColorState;
-  setColor: (color: string) => void;
+  setColor: (color: ColorInput) => void;
   setAlpha: (alpha: number) => void;
   setFromRgb: (rgb: RgbColor) => void;
   setFromHsl: (hsl: HslColor) => void;
