@@ -33,10 +33,10 @@ import 'react-beautiful-color/dist/react-beautiful-color.css';
 import { ColorPicker, useColorState } from 'react-beautiful-color';
 
 function App() {
-  const { color, setColor } = useColorState("#3b82f6");
+  const { color, setColor } = useColorState({ type: 'hex', value: '#3b82f6' });
 
   return (
-    <ColorPicker color={color.hex} onChange={setColor}>
+    <ColorPicker color={{ type: 'hex', value: color.hex }} onChange={setColor}>
       <ColorPicker.Saturation className="flex-1 mb-3" />
       
       <div className="flex items-center gap-3 p-3 pt-0">
@@ -55,7 +55,7 @@ function App() {
 ## Powerful State Hook
 
 ```tsx
-const { color, setColor } = useColorState("#3b82f6");
+const { color, setColor } = useColorState({ type: 'hex', value: '#3b82f6' });
 
 // Access all formats instantly
 console.log(color.hex);   // "#3b82f6"

@@ -8,7 +8,7 @@
         "lucide-react": "^0.540.0",
         "next": "15.5.0",
         "react": "19.1.0",
-        "react-beautiful-color": "^1.0.5",
+        "react-beautiful-color": "^1.8.2",
         "react-dom": "19.1.0",
         "react-syntax-highlighter": "^15.6.3",
       },
@@ -736,7 +736,7 @@
 
     "react": ["react@19.1.0", "", {}, "sha512-FS+XFBNvn3GTAWq26joslQgWNoFu08F4kl0J4CgdNKADkdSGXQyTCnKteIAJy96Br6YbpEU1LSzV5dYtjMkMDg=="],
 
-    "react-beautiful-color": ["react-beautiful-color@1.0.5", "", { "dependencies": { "clsx": "^2.1.1", "tailwind-merge": "^3.3.1" }, "peerDependencies": { "lucide-react": ">=0.200.0", "react": ">=16.8.0", "react-dom": ">=16.8.0" } }, "sha512-IYJrzrRn1XigSVG/MWyQipKTdMdArNnQjrKLoCP/UeWGm34gdpbX6iuUqoXBacsUvNIF2/Ee4EbqM2CukAsasQ=="],
+    "react-beautiful-color": ["react-beautiful-color@1.8.2", "", { "dependencies": { "clsx": "^2.1.1", "prettier-plugin-tailwindcss": "^0.6.8", "tailwind-merge": "^3.3.1" }, "peerDependencies": { "react": ">=16.8.0", "react-dom": ">=16.8.0" } }, "sha512-oKk1r/+mjA3QQHHe+NcC3rGkEONRVfje1nIshO/PhMasmZ12FjMiyky+1o+wQalIjKN0muInPvZfQuCyjNGfSA=="],
 
     "react-dom": ["react-dom@19.1.0", "", { "dependencies": { "scheduler": "^0.26.0" }, "peerDependencies": { "react": "^19.1.0" } }, "sha512-Xs1hdnE+DyKgeHJeJznQmYMIBG3TKIHJJT95Q58nHLSrElKlGQqDTR2HQ9fx5CN/Gk6Vh/kupBTDLU11/nDk/g=="],
 
