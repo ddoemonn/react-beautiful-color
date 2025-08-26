@@ -19,7 +19,7 @@
     "outDir": "dist"
   },
   "include": [
-    "website/srcsite/src"
+    "src"
   ],
   "exclude": [
     "node_modules",
