@@ -1,16 +1,15 @@
-import { clsx, type ClassValue } from "clsx";
-import { twMerge } from "tailwind-merge";
-import type { RgbColor, HsvColor, HslColor, ColorState } from "./types";
+import { clsx, type ClassValue } from 'clsx';
+import { twMerge } from 'tailwind-merge';
+import type { RgbColor, HsvColor, HslColor, ColorState } from './types';
 
 export const cn = (...inputs: ClassValue[]) => twMerge(clsx(inputs));
 
-const clamp = (num: number, min: number, max: number): number =>
-  Math.min(Math.max(num, min), max);
+const clamp = (num: number, min: number, max: number): number => Math.min(Math.max(num, min), max);
 
 const round = (num: number): number => Math.round(clamp(num, 0, 255));
 
 export const hexToRgb = (hex: string): RgbColor => {
-  const h = hex.replace("#", "");
+  const h = hex.replace('#', '');
   const bigint = parseInt(h, 16);
   return {
     r: (bigint >> 16) & 255,
@@ -20,7 +19,7 @@ export const hexToRgb = (hex: string): RgbColor => {
 };
 
 export const rgbToHex = ({ r, g, b }: RgbColor): string => {
-  const toHex = (c: number) => round(c).toString(16).padStart(2, "0");
+  const toHex = (c: number) => round(c).toString(16).padStart(2, '0');
   return `#${toHex(r)}${toHex(g)}${toHex(b)}`;
 };
 
@@ -118,12 +117,12 @@ export const hsvToHex = (hsv: HsvColor): string => rgbToHex(hsvToRgb(hsv));
 export const hexToHsv = (hex: string): HsvColor => rgbToHsv(hexToRgb(hex));
 
 export const isValidHex = (hex: string): boolean => {
-  const h = hex.replace("#", "");
+  const h = hex.replace('#', '');
   return /^([0-9A-Fa-f]{3}|[0-9A-Fa-f]{6}|[0-9A-Fa-f]{8})$/.test(h);
 };
 
 export const normalizeHex = (hex: string): string => {
-  const h = hex.replace("#", "");
+  const h = hex.replace('#', '');
   if (h.length === 3) {
     return `#${h[0]}${h[0]}${h[1]}${h[1]}${h[2]}${h[2]}`;
   }
@@ -133,13 +132,13 @@ export const normalizeHex = (hex: string): string => {
 export const getContrastColor = (hex: string): string => {
   const { r, g, b } = hexToRgb(hex);
   const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
-  return luminance > 0.5 ? "#000000" : "#ffffff";
+  return luminance > 0.5 ? '#000000' : '#ffffff';
 };
 
 export const randomHex = (): string => {
   return `#${Math.floor(Math.random() * 16777215)
     .toString(16)
-    .padStart(6, "0")}`;
+    .padStart(6, '0')}`;
 };
 
 export const rgbToHsl = ({ r, g, b }: RgbColor): HslColor => {
@@ -186,9 +185,9 @@ export const hslToRgb = ({ h, s, l }: HslColor): RgbColor => {
   const hue2rgb = (p: number, q: number, t: number): number => {
     if (t < 0) t += 1;
     if (t > 1) t -= 1;
-    if (t < 1/6) return p + (q - p) * 6 * t;
-    if (t < 1/2) return q;
-    if (t < 2/3) return p + (q - p) * (2/3 - t) * 6;
+    if (t < 1 / 6) return p + (q - p) * 6 * t;
+    if (t < 1 / 2) return q;
+    if (t < 2 / 3) return p + (q - p) * (2 / 3 - t) * 6;
     return p;
   };
 
@@ -199,9 +198,9 @@ export const hslToRgb = ({ h, s, l }: HslColor): RgbColor => {
   } else {
     const q = l < 0.5 ? l * (1 + s) : l + s - l * s;
     const p = 2 * l - q;
-    r = hue2rgb(p, q, h + 1/3);
+    r = hue2rgb(p, q, h + 1 / 3);
     g = hue2rgb(p, q, h);
-    b = hue2rgb(p, q, h - 1/3);
+    b = hue2rgb(p, q, h - 1 / 3);
   }
 
   return {
@@ -216,10 +215,8 @@ export const hslToHex = (hsl: HslColor): string => rgbToHex(hslToRgb(hsl));
 export const hexToHsl = (hex: string): HslColor => rgbToHsl(hexToRgb(hex));
 
 export const hsvToHsl = ({ h, s, v }: HsvColor): HslColor => {
-  const l = v * (2 - s / 100) / 2;
-  const sL = l !== 0 && l !== 100 
-    ? (v - l) / Math.min(l, 100 - l) * 100 
-    : 0;
+  const l = (v * (2 - s / 100)) / 2;
+  const sL = l !== 0 && l !== 100 ? ((v - l) / Math.min(l, 100 - l)) * 100 : 0;
 
   return {
     h,
@@ -229,7 +226,7 @@ export const hsvToHsl = ({ h, s, v }: HsvColor): HslColor => {
 };
 
 export const hslToHsv = ({ h, s, l }: HslColor): HsvColor => {
-  const v = l + s * Math.min(l, 100 - l) / 100;
+  const v = l + (s * Math.min(l, 100 - l)) / 100;
   const sV = v === 0 ? 0 : 2 * (1 - l / v) * 100;
 
   return {
@@ -240,7 +237,7 @@ export const hslToHsv = ({ h, s, l }: HslColor): HsvColor => {
 };
 
 export const extractAlphaFromHex = (hex: string): number => {
-  const h = hex.replace("#", "");
+  const h = hex.replace('#', '');
   if (h.length === 8) {
     const alphaHex = h.substring(6, 8);
     return parseInt(alphaHex, 16) / 255;
@@ -249,7 +246,7 @@ export const extractAlphaFromHex = (hex: string): number => {
 };
 
 export const stripAlphaFromHex = (hex: string): string => {
-  const h = hex.replace("#", "");
+  const h = hex.replace('#', '');
   if (h.length === 8) {
     return `#${h.substring(0, 6)}`;
   }
@@ -258,24 +255,24 @@ export const stripAlphaFromHex = (hex: string): string => {
 
 export const parseColorString = (input: string): string => {
   const clean = input.trim();
-  
+
   if (clean.startsWith('#')) {
     if (isValidHex(clean)) {
       return stripAlphaFromHex(normalizeHex(clean));
     }
-    return "#ff0000";
+    return '#ff0000';
   }
-  
+
   const rgbMatch = clean.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*[\d.]+)?\)/);
   if (rgbMatch) {
     const r = parseInt(rgbMatch[1]);
-    const g = parseInt(rgbMatch[2]); 
+    const g = parseInt(rgbMatch[2]);
     const b = parseInt(rgbMatch[3]);
     if (r <= 255 && g <= 255 && b <= 255) {
       return rgbToHex({ r, g, b });
     }
   }
-  
+
   const hslMatch = clean.match(/hsla?\((\d+),\s*(\d+)%,\s*(\d+)%(?:,\s*[\d.]+)?\)/);
   if (hslMatch) {
     const h = parseInt(hslMatch[1]);
@@ -285,32 +282,40 @@ export const parseColorString = (input: string): string => {
       return hslToHex({ h, s, l });
     }
   }
-  
+
   const namedColors: Record<string, string> = {
-    red: '#ff0000', green: '#008000', blue: '#0000ff',
-    white: '#ffffff', black: '#000000', yellow: '#ffff00',
-    cyan: '#00ffff', magenta: '#ff00ff', gray: '#808080',
-    orange: '#ffa500', purple: '#800080', pink: '#ffc0cb'
+    red: '#ff0000',
+    green: '#008000',
+    blue: '#0000ff',
+    white: '#ffffff',
+    black: '#000000',
+    yellow: '#ffff00',
+    cyan: '#00ffff',
+    magenta: '#ff00ff',
+    gray: '#808080',
+    orange: '#ffa500',
+    purple: '#800080',
+    pink: '#ffc0cb',
   };
-  
+
   const lowerCase = clean.toLowerCase();
   if (namedColors[lowerCase]) {
     return namedColors[lowerCase];
   }
-  
-  return "#ff0000";
+
+  return '#ff0000';
 };
 
 export const createColorState = (input: string, fallbackAlpha: number = 1): ColorState => {
   let alpha = fallbackAlpha;
-  
+
   if (input.startsWith('#')) {
-    const h = input.replace("#", "");
+    const h = input.replace('#', '');
     if (h.length === 8) {
       alpha = extractAlphaFromHex(input);
     }
   }
-  
+
   const normalizedHex = parseColorString(input);
   const rgb = hexToRgb(normalizedHex);
   const hsv = rgbToHsv(rgb);

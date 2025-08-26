@@ -30,14 +30,7 @@ export interface HsvaColor extends HsvColor {
 
 export type HexColor = string;
 
-export type ColorFormat =
-  | "hex"
-  | "rgb"
-  | "rgba"
-  | "hsl"
-  | "hsla"
-  | "hsv"
-  | "hsva";
+export type ColorFormat = 'hex' | 'rgb' | 'rgba' | 'hsl' | 'hsla' | 'hsv' | 'hsva';
 
 export interface ColorState {
   hex: string;

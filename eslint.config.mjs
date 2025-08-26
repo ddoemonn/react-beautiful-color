@@ -1,58 +1,72 @@
-import js from '@eslint/js'
-import typescript from '@typescript-eslint/eslint-plugin'
-import typescriptParser from '@typescript-eslint/parser'
-import react from 'eslint-plugin-react'
-import reactHooks from 'eslint-plugin-react-hooks'
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+import { FlatCompat } from '@eslint/eslintrc';
+import js from '@eslint/js';
+import typescriptEslint from '@typescript-eslint/eslint-plugin';
+import tsParser from '@typescript-eslint/parser';
+import prettier from 'eslint-plugin-prettier';
+import react from 'eslint-plugin-react';
+import reactHooks from 'eslint-plugin-react-hooks';
+import globals from 'globals';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const compat = new FlatCompat({
+  baseDirectory: __dirname,
+  recommendedConfig: js.configs.recommended,
+  allConfig: js.configs.all,
+});
 
 export default [
-  js.configs.recommended,
+  ...compat.extends('prettier', 'plugin:@typescript-eslint/recommended', 'plugin:react/recommended', 'plugin:react-hooks/recommended'),
   {
-    files: ['**/*.{ts,tsx}'],
-    languageOptions: {
-      parser: typescriptParser,
-      parserOptions: {
-        ecmaVersion: 2020,
-        sourceType: 'module',
-        ecmaFeatures: {
-          jsx: true,
-        },
-      },
-      globals: {
-        // Browser globals
-        window: 'readonly',
-        document: 'readonly',
-        console: 'readonly',
-        setTimeout: 'readonly',
-        self: 'readonly',
-        // DOM types
-        MouseEvent: 'readonly',
-        TouchEvent: 'readonly',
-        TouchList: 'readonly',
-        Touch: 'readonly',
-        HTMLDivElement: 'readonly',
-        Window: 'readonly',
-      },
-    },
     plugins: {
-      '@typescript-eslint': typescript,
+      prettier,
+      '@typescript-eslint': typescriptEslint,
       react,
       'react-hooks': reactHooks,
     },
-    rules: {
-      ...typescript.configs.recommended.rules,
-      ...react.configs.recommended.rules,
-      ...reactHooks.configs.recommended.rules,
-      'react/react-in-jsx-scope': 'off',
-      'react/prop-types': 'off',
-      '@typescript-eslint/explicit-function-return-type': 'off',
-      '@typescript-eslint/explicit-module-boundary-types': 'off',
-      '@typescript-eslint/no-explicit-any': 'warn',
-      '@typescript-eslint/no-unused-vars': 'warn',
-    },
-    settings: {
-      react: {
-        version: 'detect',
+    languageOptions: {
+      globals: {
+        ...globals.browser,
+        ...globals.jest,
+        JSX: 'readonly',
+        React: 'readonly',
       },
+      parser: tsParser,
+    },
+    rules: {
+      'import/no-anonymous-default-export': 'off',
+      'react/react-in-jsx-scope': 'off',
+      'react/display-name': 'off',
+      'react-hooks/exhaustive-deps': 'warn',
+      'react-hooks/rules-of-hooks': 'error',
+      'react/self-closing-comp': 'error',
+      'prettier/prettier': 'error',
+      'object-shorthand': 'error',
+      quotes: [
+        'error',
+        'single',
+        {
+          avoidEscape: true,
+        },
+      ],
+      'react/jsx-curly-brace-presence': [
+        'error',
+        {
+          props: 'never',
+          children: 'never',
+        },
+      ],
     },
   },
-]
+  {
+    files: ['**/*.ts', '**/*.tsx'],
+    rules: {
+      '@typescript-eslint/no-unused-vars': 'warn',
+      '@typescript-eslint/restrict-template-expressions': 'off',
+      '@typescript-eslint/no-floating-promises': 'off',
+    },
+  },
+];

@@ -1,25 +1,9 @@
-import { useState, useCallback, useMemo } from "react";
-import type { 
-  ColorState, 
-  UseColorStateReturn, 
-  RgbColor, 
-  HslColor, 
-  HsvColor 
-} from "../types";
-import { 
-  createColorState, 
-  parseColorString,
-  rgbToHex, 
-  hslToHex, 
-  hsvToHex 
-} from "../utils";
+import { useState, useCallback, useMemo } from 'react';
+import type { ColorState, UseColorStateReturn, RgbColor, HslColor, HsvColor } from '../types';
+import { createColorState, parseColorString, rgbToHex, hslToHex, hsvToHex } from '../utils';
 
-export const useColorState = (
-  initialColor: string = "#ff6b9d"
-): UseColorStateReturn => {
-  const [colorState, setColorState] = useState<ColorState>(() =>
-    createColorState(initialColor, 1)
-  );
+export const useColorState = (initialColor: string = '#ff6b9d'): UseColorStateReturn => {
+  const [colorState, setColorState] = useState<ColorState>(() => createColorState(initialColor, 1));
 
   const color = useMemo(() => colorState, [colorState]);
 
@@ -41,17 +25,26 @@ export const useColorState = (
     }));
   }, []);
 
-  const setFromRgb = useCallback((rgb: RgbColor) => {
-    setColor(rgbToHex(rgb));
-  }, [setColor]);
+  const setFromRgb = useCallback(
+    (rgb: RgbColor) => {
+      setColor(rgbToHex(rgb));
+    },
+    [setColor]
+  );
 
-  const setFromHsl = useCallback((hsl: HslColor) => {
-    setColor(hslToHex(hsl));
-  }, [setColor]);
+  const setFromHsl = useCallback(
+    (hsl: HslColor) => {
+      setColor(hslToHex(hsl));
+    },
+    [setColor]
+  );
 
-  const setFromHsv = useCallback((hsv: HsvColor) => {
-    setColor(hsvToHex(hsv));
-  }, [setColor]);
+  const setFromHsv = useCallback(
+    (hsv: HsvColor) => {
+      setColor(hsvToHex(hsv));
+    },
+    [setColor]
+  );
 
   return {
     color,

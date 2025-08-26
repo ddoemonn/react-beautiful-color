@@ -1,9 +1,9 @@
 // Import CSS styles
-import "./styles.css";
+import './styles.css';
 
-export { ColorPicker } from "./components/ColorPicker";
+export { ColorPicker } from './components/ColorPicker';
 
-export { useColorState } from "./hooks/useColorState";
+export { useColorState } from './hooks/useColorState';
 
 export {
   cn,
@@ -28,7 +28,7 @@ export {
   randomHex,
   extractAlphaFromHex,
   stripAlphaFromHex,
-} from "./utils";
+} from './utils';
 
 export type {
   RgbColor,
@@ -42,6 +42,6 @@ export type {
   ColorState,
   UseColorStateReturn,
   ColorPickerProps,
-} from "./types";
+} from './types';
 
-export const version = "2.0.0";
+export const version = '2.0.0';
