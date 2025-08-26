@@ -1,6 +1,6 @@
 import { useState, useCallback, useMemo } from 'react';
 import type { ColorState, UseColorStateReturn, RgbColor, HslColor, HsvColor, ColorInput } from '../types';
-import { createColorState, parseColorString, rgbToHex, hslToHex, hsvToHex } from '../utils';
+import { createColorState, rgbToHex, hslToHex, hsvToHex } from '../utils';
 
 export const useColorState = (initialColor: string = '#ff6b9d'): UseColorStateReturn => {
   const [colorState, setColorState] = useState<ColorState>(() => createColorState(initialColor, 1));
@@ -40,12 +40,12 @@ export const useColorState = (initialColor: string = '#ff6b9d'): UseColorStateRe
         default:
           // TypeScript exhaustiveness check
           const _exhaustive: never = colorInput;
-          throw new Error(`Unsupported color type: ${(_exhaustive as any).type}`);
+          throw new Error(`Unsupported color type: ${(colorInput as { type: string }).type}`);
       }
 
       setColorState(createColorState(hexColor, alpha));
     } catch (error) {
-      console.warn(`Invalid color input:`, colorInput, error);
+      console.warn('Invalid color input:', colorInput, error);
     }
   }, []);
   const setAlpha = useCallback((alpha: number) => {

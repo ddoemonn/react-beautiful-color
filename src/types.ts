@@ -44,7 +44,7 @@ export interface ColorState {
 }
 
 // Type-safe color input objects using discriminated unions
-export type ColorInput = 
+export type ColorInput =
   | { type: 'hex'; value: string }
   | { type: 'rgb'; r: number; g: number; b: number }
   | { type: 'rgba'; r: number; g: number; b: number; a: number }
