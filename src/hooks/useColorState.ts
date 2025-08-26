@@ -2,8 +2,43 @@ import { useState, useCallback, useMemo } from 'react';
 import type { ColorState, UseColorStateReturn, RgbColor, HslColor, HsvColor, ColorInput } from '../types';
 import { createColorState, rgbToHex, hslToHex, hsvToHex } from '../utils';
 
-export const useColorState = (initialColor: string = '#ff6b9d'): UseColorStateReturn => {
-  const [colorState, setColorState] = useState<ColorState>(() => createColorState(initialColor, 1));
+export const useColorState = (initialColor: ColorInput = { type: 'hex', value: '#ff6b9d' }): UseColorStateReturn => {
+  const [colorState, setColorState] = useState<ColorState>(() => {
+    let hexColor: string;
+    let alpha: number | undefined;
+
+    switch (initialColor.type) {
+      case 'hex':
+        hexColor = initialColor.value;
+        break;
+      case 'rgb':
+        hexColor = rgbToHex({ r: initialColor.r, g: initialColor.g, b: initialColor.b });
+        break;
+      case 'rgba':
+        hexColor = rgbToHex({ r: initialColor.r, g: initialColor.g, b: initialColor.b });
+        alpha = initialColor.a;
+        break;
+      case 'hsl':
+        hexColor = hslToHex({ h: initialColor.h, s: initialColor.s, l: initialColor.l });
+        break;
+      case 'hsla':
+        hexColor = hslToHex({ h: initialColor.h, s: initialColor.s, l: initialColor.l });
+        alpha = initialColor.a;
+        break;
+      case 'hsv':
+        hexColor = hsvToHex({ h: initialColor.h, s: initialColor.s, v: initialColor.v });
+        break;
+      case 'hsva':
+        hexColor = hsvToHex({ h: initialColor.h, s: initialColor.s, v: initialColor.v });
+        alpha = initialColor.a;
+        break;
+      default:
+        const _exhaustive: never = initialColor;
+        throw new Error(`Unsupported color type: ${(initialColor as { type: string }).type}`);
+    }
+
+    return createColorState(hexColor, alpha);
+  });
 
   const color = useMemo(() => colorState, [colorState]);
 

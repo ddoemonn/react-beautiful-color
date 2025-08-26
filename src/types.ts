@@ -63,8 +63,8 @@ export interface UseColorStateReturn {
 }
 
 export interface ColorPickerProps {
-  color?: string;
-  onChange?: (color: string) => void;
+  color?: ColorInput;
+  onChange?: (color: ColorInput) => void;
   className?: string;
   withEyeDropper: boolean;
 }

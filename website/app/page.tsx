@@ -9,7 +9,7 @@ import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import { NPMIcon, GitHubIcon } from './components/Icons';
 
 const App: React.FC = () => {
-  const { color, setColor } = useColorState('#ff00ff');
+  const { color, setColor } = useColorState({ type: 'hex', value: '#ff00ff' });
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -59,7 +59,7 @@ const App: React.FC = () => {
         <div className="relative flex flex-col items-center justify-center">
           {/* ColorPicker */}
           <ColorPicker
-            color={color.hex}
+            color={{ type: 'hex', value: color.hex }}
             onChange={setColor}
             className="h-[280px] w-[280px]"
           >

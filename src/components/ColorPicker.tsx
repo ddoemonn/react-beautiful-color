@@ -1,10 +1,13 @@
 import React, { useState, useEffect, useCallback, useRef, createContext, useContext } from 'react';
-import { Saturation } from './Saturation';
-import { Hue } from './Hue';
+
+import type { ColorPickerProps } from '../types';
+
+import { hexToHsv, hsvToHex, parseColorString, cn } from '../utils';
+
 import { Alpha } from './Alpha';
 import { EyedropperIcon } from './EyedropperIcon';
-import type { ColorPickerProps } from '../types';
-import { hexToHsv, hsvToHex, parseColorString, cn } from '../utils';
+import { Hue } from './Hue';
+import { Saturation } from './Saturation';
 
 interface HsvaColor {
   h: number;
@@ -33,9 +36,10 @@ interface ColorPickerMainProps extends Omit<ColorPickerProps, 'withEyeDropper'> 
   children?: React.ReactNode;
 }
 
-const ColorPickerMain: React.FC<ColorPickerMainProps> = ({ color = '#ff6b9d', onChange, className, children, ...rest }) => {
+const ColorPickerMain: React.FC<ColorPickerMainProps> = ({ color = { type: 'hex', value: '#ff6b9d' }, onChange, className, children, ...rest }) => {
   const [hsva, setHsva] = useState<HsvaColor>(() => {
-    const normalizedHex = parseColorString(color);
+    const hexColor = color.type === 'hex' ? color.value : '#ff6b9d';
+    const normalizedHex = parseColorString(hexColor);
     const hsv = hexToHsv(normalizedHex);
     return { ...hsv, a: 1 };
   });
@@ -44,8 +48,9 @@ const ColorPickerMain: React.FC<ColorPickerMainProps> = ({ color = '#ff6b9d', on
   const isInternalUpdate = useRef(false);
 
   useEffect(() => {
-    if (color !== lastExternalColor.current && !isInternalUpdate.current) {
-      const normalizedColor = parseColorString(color);
+    if (JSON.stringify(color) !== JSON.stringify(lastExternalColor.current) && !isInternalUpdate.current) {
+      const hexColor = color.type === 'hex' ? color.value : '#ff6b9d';
+      const normalizedColor = parseColorString(hexColor);
       const newHsv = hexToHsv(normalizedColor);
       setHsva(current => ({ ...newHsv, a: current.a }));
       lastExternalColor.current = color;
@@ -69,10 +74,10 @@ const ColorPickerMain: React.FC<ColorPickerMainProps> = ({ color = '#ff6b9d', on
           newColor = hsvToHex({ h: updated.h, s: updated.s, v: updated.v });
         }
 
-        if (newColor !== lastExternalColor.current) {
+        if (newColor !== (lastExternalColor.current.type === 'hex' ? lastExternalColor.current.value : '')) {
           isInternalUpdate.current = true;
-          lastExternalColor.current = newColor;
-          setTimeout(() => onChange?.(newColor), 0);
+          lastExternalColor.current = { type: 'hex', value: newColor };
+          setTimeout(() => onChange?.({ type: 'hex', value: newColor }), 0);
         }
 
         return updated;
@@ -100,7 +105,7 @@ const ColorPickerMain: React.FC<ColorPickerMainProps> = ({ color = '#ff6b9d', on
         isInternalUpdate.current = true;
         lastExternalColor.current = result.sRGBHex;
 
-        setTimeout(() => onChange?.(result.sRGBHex), 0);
+        setTimeout(() => onChange?.({ type: 'hex', value: result.sRGBHex }), 0);
       }
     } catch (error) {
       console.log('EyeDropper cancelled or failed:', error);

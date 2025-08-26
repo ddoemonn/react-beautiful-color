@@ -1,4 +1,5 @@
 import React, { useRef, useCallback, useEffect } from 'react';
+
 import { cn } from '../utils';
 
 export interface Interaction {
@@ -44,7 +45,7 @@ const getRelativePosition = (node: HTMLDivElement, event: MouseEvent | TouchEven
 };
 
 const preventDefaultMove = (event: MouseEvent | TouchEvent): void => {
-  !isTouch(event) && event.preventDefault();
+  event.preventDefault();
 };
 
 const isInvalid = (event: MouseEvent | TouchEvent, hasTouch: boolean): boolean => {
@@ -55,26 +56,23 @@ export const Interactive: React.FC<InteractiveProps> = ({ onMove, onKey, childre
   const container = useRef<HTMLDivElement>(null);
   const touchId = useRef<null | number>(null);
   const hasTouch = useRef(false);
+  const isDragging = useRef(false); // THIS IS THE KEY FIX!
 
   const handleMove = useCallback(
     (event: MouseEvent | TouchEvent) => {
+      // REMOVED THE PROBLEMATIC isDown CHECK!
+      if (!isDragging.current || !container.current) return;
+
       preventDefaultMove(event);
-
-      const isDown = isTouch(event) ? event.touches.length > 0 : event.buttons > 0;
-
-      if (isDown && container.current) {
-        onMove(getRelativePosition(container.current, event, touchId.current));
-      } else {
-        document.removeEventListener('mousemove', handleMove);
-        document.removeEventListener('mouseup', handleMoveEnd);
-        document.removeEventListener('touchmove', handleMove);
-        document.removeEventListener('touchend', handleMoveEnd);
-      }
+      onMove(getRelativePosition(container.current, event, touchId.current));
     },
     [onMove]
   );
 
   const handleMoveEnd = useCallback(() => {
+    isDragging.current = false; // Set dragging to false
+    touchId.current = null;
+
     document.removeEventListener('mousemove', handleMove);
     document.removeEventListener('mouseup', handleMoveEnd);
     document.removeEventListener('touchmove', handleMove);
@@ -90,6 +88,8 @@ export const Interactive: React.FC<InteractiveProps> = ({ onMove, onKey, childre
 
       if (isInvalid(event.nativeEvent, hasTouch.current)) return;
 
+      isDragging.current = true; // Set dragging to true
+
       if (isTouch(event.nativeEvent)) {
         hasTouch.current = true;
         const changedTouches = event.nativeEvent.changedTouches || [];
@@ -100,7 +100,7 @@ export const Interactive: React.FC<InteractiveProps> = ({ onMove, onKey, childre
       onMove(getRelativePosition(el, event.nativeEvent, touchId.current));
 
       const touch = hasTouch.current;
-      document.addEventListener(touch ? 'touchmove' : 'mousemove', handleMove);
+      document.addEventListener(touch ? 'touchmove' : 'mousemove', handleMove, { passive: false });
       document.addEventListener(touch ? 'touchend' : 'mouseup', handleMoveEnd);
     },
     [onMove, handleMove, handleMoveEnd]
