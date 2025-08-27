@@ -31,6 +31,7 @@ import 'react-beautiful-color/dist/react-beautiful-color.css';
 
 ```tsx
 import { ColorPicker, useColorState } from 'react-beautiful-color';
+import { Pipette } from 'lucide-react';
 
 function App() {
   const { color, setColor } = useColorState({ type: 'hex', value: '#3b82f6' });
@@ -40,7 +41,9 @@ function App() {
       <ColorPicker.Saturation className="flex-1 mb-3" />
       
       <div className="flex items-center gap-3 p-3 pt-0">
-        <ColorPicker.EyeDropper />
+        <ColorPicker.EyeDropper>
+          <Pipette />
+        </ColorPicker.EyeDropper>
         
         <div className="flex-1 flex flex-col gap-3">
           <ColorPicker.Hue className="h-4" />

@@ -5,7 +5,6 @@ import type { ColorPickerProps } from '../types';
 import { hexToHsv, hsvToHex, parseColorString, cn } from '../utils';
 
 import { Alpha } from './Alpha';
-import { EyedropperIcon } from './EyedropperIcon';
 import { Hue } from './Hue';
 import { Saturation } from './Saturation';
 
@@ -215,7 +214,7 @@ const CompoundEyeDropper: React.FC<CompoundEyeDropperProps> = ({ className, size
       className={cn('flex h-10 w-10 flex-shrink-0 cursor-pointer items-center justify-center rounded-lg transition-colors hover:bg-gray-100', className)}
       title={title}
     >
-      {children || <EyedropperIcon size={size} />}
+      {children}
     </button>
   );
 };
