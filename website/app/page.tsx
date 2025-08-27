@@ -2,6 +2,7 @@
 
 import React from 'react';
 
+import { Pipette } from 'lucide-react';
 import { ColorPicker, useColorState } from 'react-beautiful-color';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
@@ -70,9 +71,10 @@ const App: React.FC = () => {
 
             <div className="flex items-center gap-3 p-3 pt-0">
               {/* EyeDropper */}
-              <div>
-                <ColorPicker.EyeDropper />
-              </div>
+
+              <ColorPicker.EyeDropper>
+                <Pipette size={20} />
+              </ColorPicker.EyeDropper>
 
               <div className="flex flex-1 flex-col gap-3">
                 {/* Hue */}
