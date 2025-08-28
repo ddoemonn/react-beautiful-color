@@ -89,7 +89,7 @@ export function BasicColorPickerExample() {
           <div
             className="border-border h-16 w-32 rounded-lg border-2 shadow-sm"
             style={{
-              backgroundColor: `rgba(${color.rgb.r}, ${color.rgb.g}, ${color.rgb.b}, ${color.alpha})`,
+              backgroundColor: 'rgba(' + color.rgb.r + ', ' + color.rgb.g + ', ' + color.rgb.b + ', ' + color.alpha + ')',
               ...(color.alpha < 1 && {
                 backgroundImage:
                   'url(\'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill-opacity=".1"><rect x="8" width="8" height="8"/><rect y="8" width="8" height="8"/></svg>\')',
