@@ -1,0 +1,58 @@
+---
+title: Alpha
+description: A transparency slider component for controlling color opacity
+---
+
+import { AlphaExample } from '../../../components/ColorPickerExample';
+import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
+
+## Features
+
+- **Transparency Control**: Alpha values from 0 (transparent) to 1 (opaque)
+- **Visual Feedback**: Checkered background pattern for transparency preview
+- **Color Preview**: Gradient from transparent to full color
+- **Precise Control**: Exact percentage values
+
+## Basic Usage
+
+<Tabs items={['Preview', 'Code']}>
+  <Tab value="Preview">
+    <AlphaExample />
+  </Tab>
+  
+  <Tab value="Code">
+    ```tsx
+    import { ColorPicker, useColorState } from 'react-beautiful-color';
+
+    export function AlphaExample() {
+  const { color, setColor } = useColorState({ type: 'hex', value: '#ff6b9d' });
+
+  return (
+    <div className="p-6">
+      <div className="max-w-md">
+        <h4 className="mb-3 text-sm font-medium">Alpha Selector</h4>
+        <ColorPicker
+          color={{ type: 'hex', value: color.hex }}
+          onChange={setColor}
+          className="mb-4 max-h-4"
+        >
+          <ColorPicker.Alpha className="max-h-4" />
+        </ColorPicker>
+        <div className="space-y-1 text-sm">
+          <div>Current Alpha: {Math.round(color.alpha * 100)}%</div>
+        </div>
+      </div>
+    </div>
+  );
+}
+    ```
+  </Tab>
+</Tabs>
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `className` | `string` | - | Additional CSS classes |
+
+

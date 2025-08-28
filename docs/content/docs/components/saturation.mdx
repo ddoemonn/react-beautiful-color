@@ -1,0 +1,60 @@
+---
+title: Saturation
+description: A 2D saturation and brightness picker with intuitive color selection
+---
+
+import { SaturationExample } from '../../../components/ColorPickerExample';
+import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
+
+## Features
+
+- **2D Selection**: Horizontal saturation, vertical brightness control
+- **Visual Gradients**: Real-time color preview with smooth transitions
+- **Precise Control**: Exact percentage values for saturation and brightness
+- **Interactive Pointer**: Clear visual indicator of current selection
+
+## Basic Usage
+
+<Tabs items={['Preview', 'Code']}>
+  <Tab value="Preview">
+    <SaturationExample />
+  </Tab>
+  
+  <Tab value="Code">
+    ```tsx
+    export function SaturationExample() {
+  const { color, setColor } = useColorState({ type: 'hex', value: '#ff6b9d' });
+
+  return (
+    <div className="p-6">
+      <div className="max-w-md">
+        <h4 className="mb-3 text-sm font-medium">Saturation Selector</h4>
+        <ColorPicker
+          color={{ type: 'hex', value: color.hex }}
+          onChange={setColor}
+          className="mb-4 max-h-40"
+        >
+          <ColorPicker.Saturation className="max-h-40" />
+        </ColorPicker>
+        <div className="space-y-1 text-sm">
+          <div>
+            <div>Current Saturation: {Math.round(color.hsv.s)}%</div>
+            <div>Current Brightness: {Math.round(color.hsv.v)}%</div>
+            <div>
+              Color: <span className="font-mono">{color.hex}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+    ```
+  </Tab>
+</Tabs>
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `className` | `string` | - | Additional CSS classes |

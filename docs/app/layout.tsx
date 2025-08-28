@@ -1,8 +1,9 @@
-import { Geist, Geist_Mono, Space_Grotesk, Inter, JetBrains_Mono, Orbitron, Pacifico } from 'next/font/google';
-
-import type { Metadata } from 'next';
-import './globals.css';
 import 'react-beautiful-color/dist/react-beautiful-color.css';
+
+import '@/app/global.css';
+
+import { RootProvider } from 'fumadocs-ui/provider';
+import { Geist, Geist_Mono, Inter, JetBrains_Mono, Orbitron, Space_Grotesk, Pacifico } from 'next/font/google';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -44,22 +45,15 @@ const pacifico = Pacifico({
   weight: ['400'],
 });
 
-export const metadata: Metadata = {
-  title: 'react-beautiful-color',
-  description: 'The most flexible and beautiful color picker for React',
-};
-
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+export default function Layout({ children }: LayoutProps<'/'>) {
   return (
-    <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} ${spaceGrotesk.variable} ${inter.variable} ${jetbrains.variable} ${orbitron.variable} ${pacifico.variable} antialiased`}
-      >
-        {children}
+    <html
+      lang="en"
+      className={`${geistSans.variable} ${geistMono.variable} ${spaceGrotesk.variable} ${inter.variable} ${jetbrains.variable} ${orbitron.variable} ${pacifico.variable}`}
+      suppressHydrationWarning
+    >
+      <body className="flex min-h-screen flex-col">
+        <RootProvider>{children}</RootProvider>
       </body>
     </html>
   );

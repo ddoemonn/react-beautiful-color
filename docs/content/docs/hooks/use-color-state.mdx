@@ -1,0 +1,124 @@
+---
+title: useColorState
+description: A powerful React hook for managing color state with automatic format conversion
+---
+
+import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
+
+## Features
+
+- **Multi-Format Support**: Handles hex, rgb, rgba, hsl, hsla, hsv, hsva
+- **Automatic Conversion**: All formats available instantly
+- **Type Safety**: Full TypeScript support with type-safe inputs
+- **Alpha Channel**: Built-in transparency support
+
+## Basic Usage
+
+<Tabs items={['Preview', 'Code']}>
+  <Tab value="Preview">
+    <div className="p-6 space-y-4">
+      <div className="grid grid-cols-2 gap-4">
+        <div>
+          <h4 className="text-sm font-medium mb-2">Color Preview</h4>
+          <div 
+            className="w-full h-20 rounded-lg border-2 border-gray-200" 
+            style={{ backgroundColor: '#ff6b9d' }}
+          />
+        </div>
+        <div>
+          <h4 className="text-sm font-medium mb-2">Color Values</h4>
+          <div className="text-xs space-y-1 font-mono">
+            <div>Hex: #ff6b9d</div>
+            <div>RGB: 255, 107, 157</div>
+            <div>HSL: 334°, 100%, 71%</div>
+            <div>Alpha: 100%</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </Tab>
+  
+  <Tab value="Code">
+    ```tsx
+    import { useColorState } from 'react-beautiful-color';
+
+    function ColorDemo() {
+      const { color, setColor } = useColorState({
+        type: 'hex',
+        value: '#ff6b9d'
+      });
+
+      return (
+        <div>
+          <div 
+            style={{ backgroundColor: color.hex }}
+            className="w-full h-20 rounded"
+          />
+          
+          <div className="mt-4 space-y-2">
+            <div>Hex: {color.hex}</div>
+            <div>RGB: {color.rgb.r}, {color.rgb.g}, {color.rgb.b}</div>
+            <div>HSL: {color.hsl.h}°, {color.hsl.s}%, {color.hsl.l}%</div>
+            <div>Alpha: {Math.round(color.alpha * 100)}%</div>
+          </div>
+        </div>
+      );
+    }
+    ```
+  </Tab>
+</Tabs>
+
+## API Reference
+
+### Parameters
+
+| Parameter | Type | Default | Description |
+|-----------|------|---------|-------------|
+| `initialColor` | `ColorInput` | `{ type: 'hex', value: '#ff6b9d' }` | Initial color value |
+
+### Return Value
+
+| Property | Type | Description |
+|----------|------|-------------|
+| `color` | `ColorState` | Current color in all formats |
+| `setColor` | `(color: ColorInput) => void` | Update color from any format |
+
+## Color Formats
+
+<Tabs items={['Hex', 'RGB/RGBA', 'HSL/HSLA', 'HSV/HSVA']}>
+  <Tab value="Hex">
+    ```tsx
+    setColor({ type: 'hex', value: '#ff6b9d' });
+    ```
+  </Tab>
+  
+  <Tab value="RGB/RGBA">
+    ```tsx
+    // RGB
+    setColor({ type: 'rgb', r: 255, g: 107, b: 157 });
+    
+    // RGBA (with alpha)
+    setColor({ type: 'rgba', r: 255, g: 107, b: 157, a: 0.8 });
+    ```
+  </Tab>
+  
+  <Tab value="HSL/HSLA">
+    ```tsx
+    // HSL
+    setColor({ type: 'hsl', h: 334, s: 100, l: 71 });
+    
+    // HSLA (with alpha)
+    setColor({ type: 'hsla', h: 334, s: 100, l: 71, a: 0.8 });
+    ```
+  </Tab>
+  
+  <Tab value="HSV/HSVA">
+    ```tsx
+    // HSV
+    setColor({ type: 'hsv', h: 334, s: 58, v: 100 });
+    
+    // HSVA (with alpha)
+    setColor({ type: 'hsva', h: 334, s: 58, v: 100, a: 0.8 });
+    ```
+  </Tab>
+</Tabs>

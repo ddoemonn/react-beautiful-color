@@ -1,0 +1,82 @@
+---
+title: Getting Started
+description: Install and set up react-beautiful-color in your React project
+---
+
+import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
+
+## Installation
+
+<Tabs items={['npm', 'yarn', 'pnpm', 'bun']}>
+  <Tab value="npm">
+    ```bash
+    npm install react-beautiful-color
+    ```
+  </Tab>
+  
+  <Tab value="yarn">
+    ```bash
+    yarn add react-beautiful-color
+    ```
+  </Tab>
+  
+  <Tab value="pnpm">
+    ```bash
+    pnpm add react-beautiful-color
+    ```
+  </Tab>
+  
+  <Tab value="bun">
+    ```bash
+    bun add react-beautiful-color
+    ```
+  </Tab>
+</Tabs>
+
+## Setup
+
+**Add CSS to your layout file:**
+
+```tsx
+// app/layout.tsx (Next.js) or pages/_app.tsx or index.tsx
+import 'react-beautiful-color/dist/react-beautiful-color.css';
+```
+
+## Basic Usage
+
+```tsx
+import { ColorPicker, useColorState } from 'react-beautiful-color';
+
+function App() {
+  const { color, setColor } = useColorState({ type: 'hex', value: '#3b82f6' });
+
+  return (
+    <ColorPicker color={{ type: 'hex', value: color.hex }} onChange={setColor}>
+      <ColorPicker.Saturation className="flex-1 mb-3" />
+      
+      <div className="flex items-center gap-3 p-3 pt-0">
+        <ColorPicker.EyeDropper />
+        
+        <div className="flex-1 flex flex-col gap-3">
+          <ColorPicker.Hue className="h-4" />
+          <ColorPicker.Alpha className="h-4" />
+        </div>
+      </div>
+    </ColorPicker>
+  );
+}
+```
+
+## Key Features
+
+- **🧩 Compound Components** - Compose your own layout
+- **🎨 Beautiful Design** - Clean, modern UI 
+- **⚡ Type-Safe API** - Full TypeScript support
+- **🪶 Lightweight** - Pure Tailwind CSS, no dependencies
+
+
+## Next Steps
+
+- Learn about [ColorPicker](/docs/components/color-picker) component
+- Explore [useColorState](/docs/hooks/use-color-state) hook
+- Check individual components: [Saturation](/docs/components/saturation), [Hue](/docs/components/hue), [Alpha](/docs/components/alpha)

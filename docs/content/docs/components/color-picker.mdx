@@ -1,0 +1,194 @@
+---
+title: ColorPicker
+description: A complete color picker component with hue, saturation, and alpha controls
+---
+
+import { BasicColorPickerExample
+ } from '../../../components/ColorPickerExample';
+import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
+
+## Features
+
+- **Compound Components**: Modular design with sub-components
+- **Eye Dropper**: Built-in screen color picker (where supported)
+- **Touch & Mouse Support**: Works on all devices
+- **Color Formats**: Supports hex, rgb, rgba, hsl, hsla, hsv, hsva
+
+## Basic Usage
+
+<Tabs items={['Preview', 'Code']}>
+  <Tab value="Preview">
+    <BasicColorPickerExample />
+  </Tab>
+  
+  <Tab value="Code">
+    ```tsx
+   import { ColorPicker, useColorState } from 'react-beautiful-color';
+import { Pipette } from 'lucide-react';
+
+export function BasicColorPickerExample() {
+  const { color, setColor } = useColorState({ type: 'hex', value: '#ff6b9d' });
+
+  return (
+    <div className="flex w-full items-center justify-center py-10">
+      <ColorPicker
+        color={{ type: 'hex', value: color.hex }}
+        onChange={setColor}
+      >
+        <ColorPicker.Saturation className="mb-3 flex-1" />
+
+        <div className="flex items-center gap-3 p-3 pt-0">
+          <ColorPicker.EyeDropper>
+            <Pipette
+              size={20}
+              className="dark:text-black"
+            />
+          </ColorPicker.EyeDropper>
+
+          <div className="flex flex-1 flex-col gap-3">
+            <ColorPicker.Hue className="h-4" />
+            <ColorPicker.Alpha className="h-4" />
+          </div>
+        </div>
+      </ColorPicker>
+
+      <div className="mt-20 ml-8 flex min-w-64 flex-col">
+        <div className="bg-card mb-4 rounded-lg border p-4">
+          <h4 className="text-card-foreground mb-3 text-sm font-semibold">Color Values</h4>
+          <div className="space-y-3">
+            <div className="flex items-center justify-between">
+              <span className="text-muted-foreground text-sm font-medium">HEX</span>
+              <code className="bg-muted rounded px-2 py-1 font-mono text-sm">{color.hex}</code>
+            </div>
+            <div className="flex items-center justify-between">
+              <span className="text-muted-foreground text-sm font-medium">RGB</span>
+              <code className="bg-muted rounded px-2 py-1 font-mono text-sm">
+                {color.rgb.r}, {color.rgb.g}, {color.rgb.b}
+              </code>
+            </div>
+            <div className="flex items-center justify-between">
+              <span className="text-muted-foreground text-sm font-medium">HSL</span>
+              <code className="bg-muted rounded px-2 py-1 font-mono text-sm">
+                {color.hsl.h}°, {color.hsl.s}%, {color.hsl.l}%
+              </code>
+            </div>
+            <div className="flex items-center justify-between">
+              <span className="text-muted-foreground text-sm font-medium">HSV</span>
+              <code className="bg-muted rounded px-2 py-1 font-mono text-sm">
+                {color.hsv.h}°, {color.hsv.s}%, {color.hsv.v}%
+              </code>
+            </div>
+            <div className="flex items-center justify-between">
+              <span className="text-muted-foreground text-sm font-medium">Alpha</span>
+              <code className="bg-muted rounded px-2 py-1 font-mono text-sm">{Math.round(color.alpha * 100)}%</code>
+            </div>
+          </div>
+        </div>
+
+        <div className="flex items-center justify-center">
+          <div
+            className="border-border h-16 w-32 rounded-lg border-2 shadow-sm"
+            style={{
+              backgroundColor: `rgba(${color.rgb.r}, ${color.rgb.g}, ${color.rgb.b}, ${color.alpha})`,
+              ...(color.alpha < 1 && {
+                backgroundImage:
+                  'url(\'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill-opacity=".1"><rect x="8" width="8" height="8"/><rect y="8" width="8" height="8"/></svg>\')',
+                backgroundSize: '16px 16px',
+              }),
+            }}
+          />
+        </div>
+      </div>
+    </div>
+  );
+}
+    ```
+  </Tab>
+</Tabs>
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `color` | `ColorInput` | `{ type: 'hex', value: '#ff6b9d' }` | Initial color value |
+| `onChange` | `(color: ColorInput) => void` | - | Callback fired when color changes |
+| `className` | `string` | - | Additional CSS classes |
+
+## Color Input Format
+
+The `ColorInput` type supports multiple color formats:
+
+<Tabs items={['Hex', 'RGB/RGBA', 'HSL/HSLA', 'HSV/HSVA']}>
+  <Tab value="Hex">
+    ```tsx
+    // Hex color input
+    const hexColor = { type: 'hex', value: '#ff6b9d' };
+    ```
+  </Tab>
+  
+  <Tab value="RGB/RGBA">
+    ```tsx
+    // RGB color input
+    const rgbColor = { type: 'rgb', r: 255, g: 107, b: 157 };
+    
+    // RGBA color input (with alpha)
+    const rgbaColor = { type: 'rgba', r: 255, g: 107, b: 157, a: 0.8 };
+    ```
+  </Tab>
+  
+  <Tab value="HSL/HSLA">
+    ```tsx
+    // HSL color input
+    const hslColor = { type: 'hsl', h: 334, s: 100, l: 71 };
+    
+    // HSLA color input (with alpha)
+    const hslaColor = { type: 'hsla', h: 334, s: 100, l: 71, a: 0.8 };
+    ```
+  </Tab>
+  
+  <Tab value="HSV/HSVA">
+    ```tsx
+    // HSV color input
+    const hsvColor = { type: 'hsv', h: 334, s: 58, v: 100 };
+    
+    // HSVA color input (with alpha)
+    const hsvaColor = { type: 'hsva', h: 334, s: 58, v: 100, a: 0.8 };
+    ```
+  </Tab>
+</Tabs>
+
+## Sub-Components
+
+### ColorPicker.Saturation
+
+The saturation and brightness selection area.
+
+```tsx
+<ColorPicker.Saturation className="mb-3 flex-1" />
+```
+
+### ColorPicker.Hue
+
+The hue selection slider.
+
+```tsx
+  <ColorPicker.Hue className="h-4" />
+  ```
+
+### ColorPicker.Alpha
+
+The alpha/transparency selection slider.
+
+```tsx
+<ColorPicker.Alpha className="h-4" />
+```
+
+### ColorPicker.EyeDropper
+
+Button to activate the browser's eye dropper tool.
+
+```tsx
+<ColorPicker.EyeDropper>
+  {/* Icon content */}
+</ColorPicker.EyeDropper>
+```

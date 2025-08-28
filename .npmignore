@@ -4,7 +4,7 @@ src/
 *.tsx
 
 # Development files
-website/
+docs/
 rollup.config.js
 tsconfig.json
 .eslintrc.json

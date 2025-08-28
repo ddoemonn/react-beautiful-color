@@ -15,14 +15,14 @@ Thanks for your interest in contributing! 🎨
 
    ```bash
    bun install
-   cd website && bun install && cd ..
+   cd docs && bun install && cd ..
    ```
 
 3. **Start development:**
 
    ```bash
    bun run dev        # Library in watch mode
-   cd website && bun run dev  # Website dev server
+   cd docs && bun run dev  # Docs dev server
    ```
 
 ## 🛠️ Development Commands
@@ -56,7 +56,7 @@ bun run typecheck # TypeScript check
 - `src/hooks/` - Custom hooks
 - `src/types.ts` - TypeScript types
 - `src/utils.ts` - Utility functions
-- `website/` - Next.js documentation site
+- `docs/` - Next.js documentation site
 
 ## 🐛 Issues & Features
 
