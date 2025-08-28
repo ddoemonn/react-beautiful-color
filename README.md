@@ -75,3 +75,6 @@ setColor({ type: 'rgba', r: 255, g: 0, b: 0, a: 0.5 });
 setColor({ type: 'hsla', h: 0, s: 100, l: 50, a: 0.8 });
 setColor({ type: 'hsva', h: 0, s: 100, v: 100, a: 0.9 });
 ```
+
+<a href="https://www.buymeacoffee.com/ozergklp" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png" alt="Buy Me A Coffee" style="height: 41px !important;width: 174px !important;box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;-webkit-box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;" ></a>
+
