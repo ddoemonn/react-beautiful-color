@@ -45,7 +45,7 @@
     "type": "git",
     "url": "https://github.com/ddoemonn/react-beautiful-color"
   },
-  "homepage": "https://react-beautiful-color.vercel.app",
+  "homepage": "https://www.react-beautiful-color.dev",
   "peerDependencies": {
     "react": ">=16.8.0",
     "react-dom": ">=16.8.0"
