@@ -49,9 +49,10 @@ const pacifico = Pacifico({
 export const metadata: Metadata = {
   title: {
     default: 'React Beautiful Color - Flexible Color Picker for React',
-    template: '%s | React Beautiful Color'
+    template: '%s | React Beautiful Color',
   },
-  description: 'The most flexible and beautiful color picker for React. Built with compound components for maximum customization. Features TypeScript support, eye dropper, and all color formats.',
+  description:
+    'The most flexible and beautiful color picker for React. Built with compound components for maximum customization. Features TypeScript support, eye dropper, and all color formats.',
   keywords: [
     'react',
     'color picker',
@@ -74,7 +75,7 @@ export const metadata: Metadata = {
     'hsl',
     'hsv',
     'color formats',
-    'react-beautiful-color'
+    'react-beautiful-color',
   ],
   authors: [
     {
