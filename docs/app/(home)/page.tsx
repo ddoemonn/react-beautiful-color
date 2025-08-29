@@ -81,14 +81,15 @@ export default function HomePage() {
             <ColorPicker
               color={{ type: 'hex', value: color.hex }}
               onChange={setColor}
+              className="border-fd-border rounded-2xl border bg-white shadow-lg dark:bg-black/200"
             >
               <ColorPicker.Saturation className="mb-3 flex-1" />
 
               <div className="flex items-center gap-3 p-3 pt-0">
-                <ColorPicker.EyeDropper>
+                <ColorPicker.EyeDropper className="hover:bg-black/10 dark:hover:bg-white/10">
                   <Pipette
                     size={20}
-                    className="dark:text-black"
+                    className="dark:text-white"
                   />
                 </ColorPicker.EyeDropper>
 
