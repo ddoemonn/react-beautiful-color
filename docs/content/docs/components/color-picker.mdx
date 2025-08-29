@@ -32,24 +32,23 @@ export function BasicColorPickerExample() {
   return (
     <div className="flex w-full items-center justify-center py-10">
       <ColorPicker
-        color={{ type: 'hex', value: color.hex }}
-        onChange={setColor}
+          color={{ type: 'hex', value: color.hex }}
+          onChange={setColor}
+          className="border-fd-border rounded-2xl border bg-white shadow-lg dark:bg-black/200"
       >
         <ColorPicker.Saturation className="mb-3 flex-1" />
-
-        <div className="flex items-center gap-3 p-3 pt-0">
-          <ColorPicker.EyeDropper>
-            <Pipette
-              size={20}
-              className="dark:text-black"
-            />
-          </ColorPicker.EyeDropper>
-
-          <div className="flex flex-1 flex-col gap-3">
-            <ColorPicker.Hue className="h-4" />
-            <ColorPicker.Alpha className="h-4" />
-          </div>
-        </div>
+          <div className="flex items-center gap-3 p-3 pt-0">
+            <ColorPicker.EyeDropper className="hover:bg-black/10 dark:hover:bg-white/10">
+              <Pipette
+                size={20}
+                className="dark:text-white"
+              />
+            </ColorPicker.EyeDropper>
+              <div className="flex flex-1 flex-col gap-3">
+                <ColorPicker.Hue className="h-4" />
+                <ColorPicker.Alpha className="h-4" />
+              </div>
+            </div>
       </ColorPicker>
 
       <div className="mt-20 ml-8 flex min-w-64 flex-col">
