@@ -1,4 +1,6 @@
-import type { RgbColor, HsvColor, HslColor, ColorState } from '../types';
+import type { ColorFormat, ColorInput, HexColor, HslaColor, HslColor, HsvaColor, HsvColor, RgbaColor, RgbColor } from '../types';
+import { Color } from '../types';
+import { assertUnreachable } from './internal';
 
 const clamp = (num: number, min: number, max: number): number => Math.min(Math.max(num, min), max);
 const round = (num: number): number => Math.round(clamp(num, 0, 255));
@@ -293,19 +295,73 @@ export const randomHex = (): string => {
  * @param format - Output format: 'hex', 'rgb', 'rgba', 'hsl', 'hsla'
  * @returns Formatted color string
  */
-export const formatColorString = (color: ColorState, format: 'hex' | 'rgb' | 'rgba' | 'hsl' | 'hsla' = 'hex'): string => {
+export const formatColorString = (color: Color, format: Exclude<ColorFormat, 'hsv' | 'hsva'> = 'hex'): string => {
   switch (format) {
     case 'hex':
-      return color.hex;
+      return color.getHex();
     case 'rgb':
-      return `rgb(${color.rgb.r}, ${color.rgb.g}, ${color.rgb.b})`;
+      const rgb = color.getRgb();
+      return `rgb(${rgb.r}, ${rgb.g}, ${rgb.b})`;
     case 'rgba':
-      return `rgba(${color.rgba.r}, ${color.rgba.g}, ${color.rgba.b}, ${color.rgba.a})`;
+      const rgba = color.getRgba();
+      return `rgba(${rgba.r}, ${rgba.g}, ${rgba.b}, ${rgba.a})`;
     case 'hsl':
-      return `hsl(${color.hsl.h}, ${color.hsl.s}%, ${color.hsl.l}%)`;
+      const hsl = color.getHsl();
+      return `hsl(${hsl.h}, ${hsl.s}%, ${hsl.l}%)`;
     case 'hsla':
-      return `hsla(${color.hsla.h}, ${color.hsla.s}%, ${color.hsla.l}%, ${color.hsla.a})`;
+      const hsla = color.getHsla();
+      return `hsla(${hsla.h}, ${hsla.s}%, ${hsla.l}%, ${hsla.a})`;
     default:
-      return color.hex;
+      assertUnreachable(format);
   }
 };
+
+function toHsva(color: ColorInput): HsvaColor {
+  switch (color.type) {
+    case 'hex':
+      return { ...hexToHsv(color.value), a: 1 };
+    case 'rgb':
+      return { ...rgbToHsv(color), a: 1 };
+    case 'rgba':
+      return { ...rgbToHsv(color), a: color.a };
+    case 'hsl':
+      return { ...hslToHsv(color), a: 1 };
+    case 'hsla':
+      return { ...hslToHsv(color), a: 1 };
+    case 'hsv':
+      return { ...color, a: 1 };
+    case 'hsva':
+      return { ...color };
+    default:
+      assertUnreachable(color);
+  }
+}
+
+export function convertColor(color: ColorInput, format: 'hex'): HexColor;
+export function convertColor(color: ColorInput, format: 'rgb'): RgbColor;
+export function convertColor(color: ColorInput, format: 'rgba'): RgbaColor;
+export function convertColor(color: ColorInput, format: 'hsl'): HslColor;
+export function convertColor(color: ColorInput, format: 'hsla'): HslaColor;
+export function convertColor(color: ColorInput, format: 'hsv'): HsvColor;
+export function convertColor(color: ColorInput, format: 'hsva'): HsvaColor;
+export function convertColor(color: ColorInput, format: ColorFormat): HexColor | RgbColor | RgbaColor | HslColor | HslaColor | HsvColor | HsvaColor {
+  const hsva = toHsva(color);
+  switch (format) {
+    case 'hex':
+      return hsvToHex(hsva);
+    case 'rgb':
+      return hsvToRgb(hsva);
+    case 'rgba':
+      return { ...hsvToRgb(hsva), a: hsva.a };
+    case 'hsl':
+      return hsvToHsl(hsva);
+    case 'hsla':
+      return { ...hsvToHsl(hsva), a: hsva.a };
+    case 'hsv':
+      return { h: hsva.h, s: hsva.s, v: hsva.v };
+    case 'hsva':
+      return hsva;
+    default:
+      assertUnreachable(format);
+  }
+}

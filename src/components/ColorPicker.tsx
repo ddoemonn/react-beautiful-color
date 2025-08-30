@@ -1,9 +1,10 @@
-import React, { useState, useEffect, useCallback, useRef, createContext, useContext } from 'react';
+import React, { createContext, useCallback, useContext, useEffect, useRef, useState } from 'react';
 
-import type { ColorPickerProps } from '../types';
+import type { ColorInput, ColorPickerProps } from '../types';
+import { Color } from '../types';
+import { cn, hexToHsv, parseColorString } from '../utils';
 
-import { hexToHsv, hsvToHex, parseColorString, cn, rgbToHex, hslToHex } from '../utils';
-
+import { convertColor } from '../utils';
 import { Alpha } from './Alpha';
 import { Hue } from './Hue';
 import { Saturation } from './Saturation';
@@ -17,8 +18,9 @@ interface HsvaColor {
 
 interface ColorPickerContextType {
   hsva: HsvaColor;
-  updateHsva: (params: Partial<HsvaColor>) => void;
+  updateHsva: (params: Partial<HsvaColor>, finishedUpdates: boolean) => void;
   handleEyeDropper: () => void;
+  onFinishedUpdates: () => void;
 }
 
 const ColorPickerContext = createContext<ColorPickerContextType | null>(null);
@@ -35,119 +37,39 @@ interface ColorPickerMainProps extends Omit<ColorPickerProps, 'withEyeDropper'> 
   children?: React.ReactNode;
 }
 
-const ColorPickerMain: React.FC<ColorPickerMainProps> = ({ color = { type: 'hex', value: '#ff6b9d' }, onChange, className, children, ...rest }) => {
-  const [hsva, setHsva] = useState<HsvaColor>(() => {
-    if (color.type === 'hex') {
-      const hexColor = color.value;
-      const normalizedHex = parseColorString(hexColor);
-      const hsv = hexToHsv(normalizedHex);
-      return { ...hsv, a: 1 };
-    } else if (color.type === 'rgb') {
-      const hexColor = rgbToHex({ r: color.r, g: color.g, b: color.b });
-      const normalizedHex = parseColorString(hexColor);
-      const hsv = hexToHsv(normalizedHex);
-      return { ...hsv, a: 1 };
-    } else if (color.type === 'rgba') {
-      const hexColor = rgbToHex({ r: color.r, g: color.g, b: color.b });
-      const normalizedHex = parseColorString(hexColor);
-      const hsv = hexToHsv(normalizedHex);
-      return { ...hsv, a: color.a };
-    } else if (color.type === 'hsl') {
-      const hexColor = hslToHex({ h: color.h, s: color.s, l: color.l });
-      const normalizedHex = parseColorString(hexColor);
-      const hsv = hexToHsv(normalizedHex);
-      return { ...hsv, a: 1 };
-    } else if (color.type === 'hsla') {
-      const hexColor = hslToHex({ h: color.h, s: color.s, l: color.l });
-      const normalizedHex = parseColorString(hexColor);
-      const hsv = hexToHsv(normalizedHex);
-      return { ...hsv, a: color.a };
-    } else if (color.type === 'hsv') {
-      // NO CONVERSION NEEDED! Direct use
-      return { h: color.h, s: color.s, v: color.v, a: 1 };
-    } else if (color.type === 'hsva') {
-      // NO CONVERSION NEEDED! Direct use
-      return { h: color.h, s: color.s, v: color.v, a: color.a };
-    } else {
-      const hexColor = '#ff6b9d';
-      const normalizedHex = parseColorString(hexColor);
-      const hsv = hexToHsv(normalizedHex);
-      return { ...hsv, a: 1 };
-    }
-  });
+function getColor(color: Color | ColorInput): Color {
+  if ('type' in color) {
+    return new Color(color);
+  }
+  return color;
+}
 
-  const lastExternalColor = useRef(color);
-  const isInternalUpdate = useRef(false);
+const ColorPickerMain = ({ color, onChange, className, children, defaultColor, ...rest }: ColorPickerMainProps) => {
+  const [localColor, setLocalColor] = useState<Color>(getColor(color ?? defaultColor ?? { h: 340, s: 58, v: 100, a: 1, type: 'hsva' }));
+  const updating = useRef(false);
+  const colorRef = useRef(localColor);
 
   useEffect(() => {
-    if (JSON.stringify(color) !== JSON.stringify(lastExternalColor.current) && !isInternalUpdate.current) {
-      let newHsva: HsvaColor;
-
-      if (color.type === 'hex') {
-        const normalizedColor = parseColorString(color.value);
-        const hsv = hexToHsv(normalizedColor);
-        newHsva = { ...hsv, a: 1 };
-      } else if (color.type === 'rgb') {
-        const hexColor = rgbToHex({ r: color.r, g: color.g, b: color.b });
-        const hsv = hexToHsv(hexColor);
-        newHsva = { ...hsv, a: 1 };
-      } else if (color.type === 'rgba') {
-        const hexColor = rgbToHex({ r: color.r, g: color.g, b: color.b });
-        const hsv = hexToHsv(hexColor);
-        newHsva = { ...hsv, a: color.a };
-      } else if (color.type === 'hsl') {
-        const hexColor = hslToHex({ h: color.h, s: color.s, l: color.l });
-        const hsv = hexToHsv(hexColor);
-        newHsva = { ...hsv, a: 1 };
-      } else if (color.type === 'hsla') {
-        const hexColor = hslToHex({ h: color.h, s: color.s, l: color.l });
-        const hsv = hexToHsv(hexColor);
-        newHsva = { ...hsv, a: color.a };
-      } else if (color.type === 'hsv') {
-        // Direct use - no conversion
-        newHsva = { h: color.h, s: color.s, v: color.v, a: 1 };
-      } else if (color.type === 'hsva') {
-        // Direct use - no conversion
-        newHsva = { h: color.h, s: color.s, v: color.v, a: color.a };
-      } else {
-        // Fallback
-        const hsv = hexToHsv('#ff6b9d');
-        newHsva = { ...hsv, a: 1 };
-      }
-
-      setHsva(newHsva);
-      lastExternalColor.current = color;
+    if (!updating.current && color) {
+      colorRef.current = getColor(color);
+      setLocalColor(colorRef.current);
     }
-    isInternalUpdate.current = false;
   }, [color]);
 
   const updateHsva = useCallback(
-    (params: Partial<HsvaColor>) => {
-      setHsva(current => {
-        const updated = { ...current, ...params };
-
-        let newColor: string;
-        if (updated.a < 1) {
-          const hex = hsvToHex({ h: updated.h, s: updated.s, v: updated.v });
-          const alphaHex = Math.round(updated.a * 255)
-            .toString(16)
-            .padStart(2, '0');
-          newColor = hex + alphaHex;
-        } else {
-          newColor = hsvToHex({ h: updated.h, s: updated.s, v: updated.v });
-        }
-
-        if (newColor !== (lastExternalColor.current.type === 'hex' ? lastExternalColor.current.value : '')) {
-          isInternalUpdate.current = true;
-          lastExternalColor.current = { type: 'hex', value: newColor };
-          setTimeout(() => onChange?.({ type: 'hex', value: newColor }), 0);
-        }
-
-        return updated;
-      });
+    (hsvaColor: Partial<HsvaColor>, finishedUpdates: boolean) => {
+      const newColor = new Color({ type: 'hsva', ...colorRef.current.getHsva(), ...hsvaColor });
+      colorRef.current = newColor;
+      setLocalColor(newColor);
+      updating.current = !finishedUpdates;
+      onChange?.(newColor);
     },
     [onChange]
   );
+
+  const onFinishedUpdates = useCallback(() => {
+    updating.current = false;
+  }, []);
 
   const handleEyeDropper = useCallback(async () => {
     if (!('EyeDropper' in window)) {
@@ -163,12 +85,7 @@ const ColorPickerMain: React.FC<ColorPickerMainProps> = ({ color = { type: 'hex'
         const normalizedColor = parseColorString(result.sRGBHex);
         const newHsv = hexToHsv(normalizedColor);
 
-        setHsva(current => ({ ...newHsv, a: current.a }));
-
-        isInternalUpdate.current = true;
-        lastExternalColor.current = result.sRGBHex;
-
-        setTimeout(() => onChange?.({ type: 'hex', value: result.sRGBHex }), 0);
+        updateHsva(convertColor({ type: 'hex', value: result.sRGBHex }, 'hsva'), true);
       }
     } catch (error) {
       console.log('EyeDropper cancelled or failed:', error);
@@ -176,9 +93,10 @@ const ColorPickerMain: React.FC<ColorPickerMainProps> = ({ color = { type: 'hex'
   }, [onChange]);
 
   const contextValue: ColorPickerContextType = {
-    hsva,
+    hsva: localColor.getHsva(),
     updateHsva,
     handleEyeDropper,
+    onFinishedUpdates,
   };
 
   return (
@@ -197,12 +115,12 @@ interface CompoundSaturationProps {
   className?: string;
 }
 
-const CompoundSaturation: React.FC<CompoundSaturationProps> = ({ className }) => {
-  const { hsva, updateHsva } = useColorPickerContext();
+const CompoundSaturation = ({ className }: CompoundSaturationProps) => {
+  const { hsva, updateHsva, onFinishedUpdates } = useColorPickerContext();
 
   const handleSaturationChange = useCallback(
-    (newColor: { s: number; v: number }) => {
-      updateHsva(newColor);
+    (newColor: { s: number; v: number }, finishedUpdates: boolean) => {
+      updateHsva(newColor, finishedUpdates);
     },
     [updateHsva]
   );
@@ -212,6 +130,7 @@ const CompoundSaturation: React.FC<CompoundSaturationProps> = ({ className }) =>
       hsva={hsva}
       onChange={handleSaturationChange}
       className={className}
+      onFinishedUpdates={onFinishedUpdates}
     />
   );
 };
@@ -220,12 +139,12 @@ interface CompoundHueProps {
   className?: string;
 }
 
-const CompoundHue: React.FC<CompoundHueProps> = ({ className }) => {
-  const { hsva, updateHsva } = useColorPickerContext();
+const CompoundHue = ({ className }: CompoundHueProps) => {
+  const { hsva, updateHsva, onFinishedUpdates } = useColorPickerContext();
 
   const handleHueChange = useCallback(
-    (newHue: { h: number }) => {
-      updateHsva(newHue);
+    (newHue: { h: number }, finishedUpdates: boolean) => {
+      updateHsva(newHue, finishedUpdates);
     },
     [updateHsva]
   );
@@ -235,6 +154,7 @@ const CompoundHue: React.FC<CompoundHueProps> = ({ className }) => {
       hue={hsva.h}
       onChange={handleHueChange}
       className={className}
+      onFinishedUpdates={onFinishedUpdates}
     />
   );
 };
@@ -243,12 +163,12 @@ interface CompoundAlphaProps {
   className?: string;
 }
 
-const CompoundAlpha: React.FC<CompoundAlphaProps> = ({ className }) => {
-  const { hsva, updateHsva } = useColorPickerContext();
+const CompoundAlpha = ({ className }: CompoundAlphaProps) => {
+  const { hsva, updateHsva, onFinishedUpdates } = useColorPickerContext();
 
   const handleAlphaChange = useCallback(
-    (newAlpha: { a: number }) => {
-      updateHsva(newAlpha);
+    (newAlpha: { a: number }, finishedUpdates: boolean) => {
+      updateHsva(newAlpha, finishedUpdates);
     },
     [updateHsva]
   );
@@ -258,6 +178,7 @@ const CompoundAlpha: React.FC<CompoundAlphaProps> = ({ className }) => {
       hsva={hsva}
       onChange={handleAlphaChange}
       className={className}
+      onFinishedUpdates={onFinishedUpdates}
     />
   );
 };
@@ -269,9 +190,12 @@ interface CompoundEyeDropperProps {
   children?: React.ReactNode;
 }
 
-const CompoundEyeDropper: React.FC<CompoundEyeDropperProps> = ({ className, size = 18, title = 'Pick color from screen', children }) => {
+const CompoundEyeDropper = ({ className, size = 18, title = 'Pick color from screen', children }: CompoundEyeDropperProps) => {
   const { handleEyeDropper } = useColorPickerContext();
 
+  if (!('EyeDropper' in window)) {
+    return null;
+  }
   return (
     <button
       onClick={handleEyeDropper}

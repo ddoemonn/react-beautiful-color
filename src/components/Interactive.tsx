@@ -1,6 +1,8 @@
-import React, { useRef, useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useRef } from 'react';
 
 import { cn } from '../utils';
+import { clamp } from '../utils/internal';
+import { Pointer, PointerProps } from './Pointer';
 
 export interface Interaction {
   left: number;
@@ -9,6 +11,7 @@ export interface Interaction {
 
 interface InteractiveProps {
   onMove: (interaction: Interaction) => void;
+  onMoveEnd: () => void;
   onKey?: (offset: Interaction) => void;
   children: React.ReactNode;
   className?: string;
@@ -17,9 +20,8 @@ interface InteractiveProps {
   'aria-valuemax'?: number;
   'aria-valuemin'?: number;
   'aria-valuetext'?: string;
+  pointer: Pick<PointerProps, 'className' | 'top' | 'left'>;
 }
-
-const clamp = (num: number, min = 0, max = 1): number => Math.min(Math.max(num, min), max);
 
 // Simple and reliable position calculation based on react-colorful approach
 const getRelativePosition = (element: HTMLElement, event: MouseEvent | TouchEvent): Interaction => {
@@ -45,13 +47,13 @@ const getRelativePosition = (element: HTMLElement, event: MouseEvent | TouchEven
   const y = clientY - rect.top;
 
   // Convert to normalized coordinates (0-1)
-  const left = clamp(x / rect.width);
-  const top = clamp(y / rect.height);
+  const left = clamp(x / rect.width, 0, 1);
+  const top = clamp(y / rect.height, 0, 1);
 
   return { left, top };
 };
 
-export const Interactive: React.FC<InteractiveProps> = ({ onMove, onKey, children, className, ...ariaProps }) => {
+export const Interactive: React.FC<InteractiveProps> = ({ onMove, onMoveEnd, onKey, children, className, pointer, ...ariaProps }) => {
   const container = useRef<HTMLDivElement>(null);
   const isPressed = useRef(false);
 
@@ -68,11 +70,12 @@ export const Interactive: React.FC<InteractiveProps> = ({ onMove, onKey, childre
   const handleMoveEnd = useCallback(() => {
     isPressed.current = false;
 
+    onMoveEnd();
     document.removeEventListener('mousemove', handleMove);
     document.removeEventListener('mouseup', handleMoveEnd);
     document.removeEventListener('touchmove', handleMove);
     document.removeEventListener('touchend', handleMoveEnd);
-  }, [handleMove]);
+  }, [handleMove, onMoveEnd]);
 
   const handleMoveStart = useCallback(
     (event: React.MouseEvent | React.TouchEvent) => {

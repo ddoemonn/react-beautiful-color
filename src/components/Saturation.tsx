@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react';
-import { Interactive, Interaction } from './Interactive';
-import { Pointer } from './Pointer';
 import { cn } from '../utils';
+import { clamp, round } from '../utils/internal';
+import { Interaction, Interactive } from './Interactive';
 
 interface HsvaColor {
   h: number;
@@ -12,31 +12,31 @@ interface HsvaColor {
 
 interface SaturationProps {
   hsva: HsvaColor;
-  onChange: (newColor: { s: number; v: number }) => void;
+  onChange: (newColor: { s: number; v: number }, finishedUpdates: boolean) => void;
   className?: string;
+  onFinishedUpdates: () => void;
 }
 
-const clamp = (num: number, min: number, max: number): number => Math.min(Math.max(num, min), max);
-
-const round = (num: number): number => Math.round(num);
-
-export const Saturation: React.FC<SaturationProps> = ({ hsva, onChange, className }) => {
+export const Saturation: React.FC<SaturationProps> = ({ hsva, onChange, className, onFinishedUpdates }) => {
   const handleMove = useCallback(
     (interaction: Interaction) => {
       const s = round(clamp(interaction.left * 100, 0, 100));
       const v = round(clamp(100 - interaction.top * 100, 0, 100));
 
-      onChange({ s, v });
+      onChange({ s, v }, false);
     },
     [onChange]
   );
 
   const handleKey = useCallback(
     (offset: Interaction) => {
-      onChange({
-        s: clamp(hsva.s + offset.left * 100, 0, 100),
-        v: clamp(hsva.v - offset.top * 100, 0, 100),
-      });
+      onChange(
+        {
+          s: clamp(hsva.s + offset.left * 100, 0, 100),
+          v: clamp(hsva.v - offset.top * 100, 0, 100),
+        },
+        true
+      );
     },
     [hsva.s, hsva.v, onChange]
   );
@@ -47,6 +47,7 @@ export const Saturation: React.FC<SaturationProps> = ({ hsva, onChange, classNam
     <div className={cn('relative h-full w-full', className)}>
       <Interactive
         onMove={handleMove}
+        onMoveEnd={onFinishedUpdates}
         onKey={handleKey}
         aria-label="Color"
         aria-valuetext={`Saturation ${round(hsva.s)}%, Brightness ${round(hsva.v)}%`}
