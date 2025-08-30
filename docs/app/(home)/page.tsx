@@ -3,10 +3,14 @@
 import Link from 'next/link';
 import { Palette, Zap, Code, Sparkles, Pipette, Github, Package, Coffee, Heart } from 'lucide-react';
 import { ColorPicker, useColorState } from 'react-beautiful-color';
+import { cn } from 'fumadocs-ui/utils/cn';
 
 export default function HomePage() {
-  const { color, setColor } = useColorState({ type: 'hsva', h: 334, s: 100, v: 100, a: 0.5 });
+  const [{ colorInput, colorState }, setColor] = useColorState({ type: 'hsva', h: 334, s: 100, v: 100, a: 0.5 });
 
+  console.log(colorState, 'colorState');
+
+  console.log(colorInput, 'colorInput');
   return (
     <main className="flex flex-1 flex-col">
       {/* Hero Section */}
@@ -23,8 +27,8 @@ export default function HomePage() {
             <h1 className="text-6xl leading-tight tracking-tight md:text-5xl">
               <span className="font-[family-name:var(--font-inter)] font-black text-black transition-colors duration-200 dark:text-white">react-</span>
               <span
-                className="pr-2 font-[family-name:var(--font-pacifico)] transition-colors duration-200"
-                style={{ color: color.hex }}
+                className={cn('pr-2 font-[family-name:var(--font-pacifico)] transition-colors duration-200', `color: ${colorState.hex}`)}
+                style={{ color: colorState.hex }}
               >
                 beautiful
               </span>
@@ -79,7 +83,7 @@ export default function HomePage() {
 
           <div className="flex w-full justify-center">
             <ColorPicker
-              color={{ type: 'hsva', h: color.hsv.h, s: color.hsv.s, v: color.hsv.v, a: color.alpha }}
+              color={colorInput}
               onChange={setColor}
               className="border-fd-border rounded-2xl border bg-white shadow-lg dark:bg-black/200"
             >

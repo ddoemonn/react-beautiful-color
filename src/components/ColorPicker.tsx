@@ -63,15 +63,11 @@ const ColorPickerMain: React.FC<ColorPickerMainProps> = ({ color = { type: 'hex'
       const hsv = hexToHsv(normalizedHex);
       return { ...hsv, a: color.a };
     } else if (color.type === 'hsv') {
-      const hexColor = hsvToHex({ h: color.h, s: color.s, v: color.v });
-      const normalizedHex = parseColorString(hexColor);
-      const hsv = hexToHsv(normalizedHex);
-      return { ...hsv, a: 1 };
+      // NO CONVERSION NEEDED! Direct use
+      return { h: color.h, s: color.s, v: color.v, a: 1 };
     } else if (color.type === 'hsva') {
-      const hexColor = hsvToHex({ h: color.h, s: color.s, v: color.v });
-      const normalizedHex = parseColorString(hexColor);
-      const hsv = hexToHsv(normalizedHex);
-      return { ...hsv, a: color.a };
+      // NO CONVERSION NEEDED! Direct use
+      return { h: color.h, s: color.s, v: color.v, a: color.a };
     } else {
       const hexColor = '#ff6b9d';
       const normalizedHex = parseColorString(hexColor);
@@ -85,10 +81,41 @@ const ColorPickerMain: React.FC<ColorPickerMainProps> = ({ color = { type: 'hex'
 
   useEffect(() => {
     if (JSON.stringify(color) !== JSON.stringify(lastExternalColor.current) && !isInternalUpdate.current) {
-      const hexColor = color.type === 'hex' ? color.value : '#ff6b9d';
-      const normalizedColor = parseColorString(hexColor);
-      const newHsv = hexToHsv(normalizedColor);
-      setHsva(current => ({ ...newHsv, a: current.a }));
+      let newHsva: HsvaColor;
+
+      if (color.type === 'hex') {
+        const normalizedColor = parseColorString(color.value);
+        const hsv = hexToHsv(normalizedColor);
+        newHsva = { ...hsv, a: 1 };
+      } else if (color.type === 'rgb') {
+        const hexColor = rgbToHex({ r: color.r, g: color.g, b: color.b });
+        const hsv = hexToHsv(hexColor);
+        newHsva = { ...hsv, a: 1 };
+      } else if (color.type === 'rgba') {
+        const hexColor = rgbToHex({ r: color.r, g: color.g, b: color.b });
+        const hsv = hexToHsv(hexColor);
+        newHsva = { ...hsv, a: color.a };
+      } else if (color.type === 'hsl') {
+        const hexColor = hslToHex({ h: color.h, s: color.s, l: color.l });
+        const hsv = hexToHsv(hexColor);
+        newHsva = { ...hsv, a: 1 };
+      } else if (color.type === 'hsla') {
+        const hexColor = hslToHex({ h: color.h, s: color.s, l: color.l });
+        const hsv = hexToHsv(hexColor);
+        newHsva = { ...hsv, a: color.a };
+      } else if (color.type === 'hsv') {
+        // Direct use - no conversion
+        newHsva = { h: color.h, s: color.s, v: color.v, a: 1 };
+      } else if (color.type === 'hsva') {
+        // Direct use - no conversion
+        newHsva = { h: color.h, s: color.s, v: color.v, a: color.a };
+      } else {
+        // Fallback
+        const hsv = hexToHsv('#ff6b9d');
+        newHsva = { ...hsv, a: 1 };
+      }
+
+      setHsva(newHsva);
       lastExternalColor.current = color;
     }
     isInternalUpdate.current = false;

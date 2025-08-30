@@ -23,10 +23,10 @@ const round = (num: number): number => Math.round(num);
 export const Saturation: React.FC<SaturationProps> = ({ hsva, onChange, className }) => {
   const handleMove = useCallback(
     (interaction: Interaction) => {
-      onChange({
-        s: interaction.left * 100,
-        v: 100 - interaction.top * 100,
-      });
+      const s = round(clamp(interaction.left * 100, 0, 100));
+      const v = round(clamp(100 - interaction.top * 100, 0, 100));
+
+      onChange({ s, v });
     },
     [onChange]
   );

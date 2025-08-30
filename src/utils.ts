@@ -1,6 +1,6 @@
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
-import type { RgbColor, HsvColor, HslColor, ColorState } from './types';
+import type { RgbColor, HsvColor, HslColor, ColorState, ColorInput } from './types';
 
 export const cn = (...inputs: ClassValue[]) => twMerge(clsx(inputs));
 
@@ -331,6 +331,68 @@ export const createColorState = (input: string, fallbackAlpha: number = 1): Colo
     hsva: { ...hsv, a: alpha },
     alpha,
   };
+};
+
+export const createColorStateFromInput = (colorInput: ColorInput): ColorState => {
+  let hexColor: string;
+  let alpha: number;
+
+  switch (colorInput.type) {
+    case 'hex':
+      hexColor = colorInput.value;
+      alpha = extractAlphaFromHex(colorInput.value);
+      break;
+    case 'rgb':
+      hexColor = rgbToHex(colorInput);
+      alpha = 1;
+      break;
+    case 'rgba':
+      hexColor = rgbToHex(colorInput);
+      alpha = colorInput.a;
+      break;
+    case 'hsl':
+      hexColor = hslToHex(colorInput);
+      alpha = 1;
+      break;
+    case 'hsla':
+      hexColor = hslToHex(colorInput);
+      alpha = colorInput.a;
+      break;
+    case 'hsv':
+      hexColor = hsvToHex(colorInput);
+      alpha = 1;
+      break;
+    case 'hsva':
+      hexColor = hsvToHex(colorInput);
+      alpha = colorInput.a;
+      break;
+    default:
+      throw new Error(`Unsupported color type: ${(colorInput as { type: string }).type}`);
+  }
+
+  return createColorState(hexColor, alpha);
+};
+
+// Function to convert any ColorState back to specific ColorInput format
+export const colorStateToInput = (colorState: ColorState, targetType: ColorInput['type']): ColorInput => {
+  switch (targetType) {
+    case 'hex':
+      return { type: 'hex', value: colorState.hex };
+    case 'rgb':
+      return { type: 'rgb', r: colorState.rgb.r, g: colorState.rgb.g, b: colorState.rgb.b };
+    case 'rgba':
+      return { type: 'rgba', r: colorState.rgba.r, g: colorState.rgba.g, b: colorState.rgba.b, a: colorState.rgba.a };
+    case 'hsl':
+      return { type: 'hsl', h: colorState.hsl.h, s: colorState.hsl.s, l: colorState.hsl.l };
+    case 'hsla':
+      return { type: 'hsla', h: colorState.hsla.h, s: colorState.hsla.s, l: colorState.hsla.l, a: colorState.hsla.a };
+    case 'hsv':
+      return { type: 'hsv', h: colorState.hsv.h, s: colorState.hsv.s, v: colorState.hsv.v };
+    case 'hsva':
+      return { type: 'hsva', h: colorState.hsva.h, s: colorState.hsva.s, v: colorState.hsva.v, a: colorState.hsva.a };
+    default:
+      throw new Error(`Unsupported color type: ${targetType}`);
+  }
 };
 
 export const formatColorString = (color: ColorState, format: 'hex' | 'rgb' | 'rgba' | 'hsl' | 'hsla' = 'hex'): string => {

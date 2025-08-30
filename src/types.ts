@@ -62,6 +62,15 @@ export interface UseColorStateReturn {
   setFromHsv: (hsv: HsvColor) => void;
 }
 
+// New array-style return type
+export type UseColorStateArrayReturn = [
+  {
+    colorInput: ColorInput;
+    colorState: ColorState;
+  },
+  (color: ColorInput) => void,
+];
+
 export interface ColorPickerProps {
   color?: ColorInput;
   onChange?: (color: ColorInput) => void;

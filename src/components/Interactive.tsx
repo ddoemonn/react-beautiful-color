@@ -19,59 +19,54 @@ interface InteractiveProps {
   'aria-valuetext'?: string;
 }
 
-const isTouch = (event: MouseEvent | TouchEvent): event is TouchEvent => 'touches' in event;
-
-const getTouchPoint = (touches: TouchList, touchId: null | number): Touch => {
-  for (let i = 0; i < touches.length; i++) {
-    if (touches[i].identifier === touchId) return touches[i];
-  }
-  return touches[0];
-};
-
-const getParentWindow = (node?: HTMLDivElement | null): Window => {
-  return (node && node.ownerDocument.defaultView) || self;
-};
-
 const clamp = (num: number, min = 0, max = 1): number => Math.min(Math.max(num, min), max);
 
-const getRelativePosition = (node: HTMLDivElement, event: MouseEvent | TouchEvent, touchId: null | number): Interaction => {
-  const rect = node.getBoundingClientRect();
-  const pointer = isTouch(event) ? getTouchPoint(event.touches, touchId) : (event as MouseEvent);
+// Simple and reliable position calculation based on react-colorful approach
+const getRelativePosition = (element: HTMLElement, event: MouseEvent | TouchEvent): Interaction => {
+  const rect = element.getBoundingClientRect();
 
-  return {
-    left: clamp((pointer.pageX - (rect.left + getParentWindow(node).pageXOffset)) / rect.width),
-    top: clamp((pointer.pageY - (rect.top + getParentWindow(node).pageYOffset)) / rect.height),
-  };
-};
+  // Get pointer coordinates
+  let clientX: number;
+  let clientY: number;
 
-const preventDefaultMove = (event: MouseEvent | TouchEvent): void => {
-  event.preventDefault();
-};
+  if ('touches' in event) {
+    // Touch event
+    const touch = event.touches[0] || event.changedTouches[0];
+    clientX = touch.clientX;
+    clientY = touch.clientY;
+  } else {
+    // Mouse event
+    clientX = event.clientX;
+    clientY = event.clientY;
+  }
 
-const isInvalid = (event: MouseEvent | TouchEvent, hasTouch: boolean): boolean => {
-  return hasTouch && !isTouch(event);
+  // Calculate relative position
+  const x = clientX - rect.left;
+  const y = clientY - rect.top;
+
+  // Convert to normalized coordinates (0-1)
+  const left = clamp(x / rect.width);
+  const top = clamp(y / rect.height);
+
+  return { left, top };
 };
 
 export const Interactive: React.FC<InteractiveProps> = ({ onMove, onKey, children, className, ...ariaProps }) => {
   const container = useRef<HTMLDivElement>(null);
-  const touchId = useRef<null | number>(null);
-  const hasTouch = useRef(false);
-  const isDragging = useRef(false); // THIS IS THE KEY FIX!
+  const isPressed = useRef(false);
 
   const handleMove = useCallback(
     (event: MouseEvent | TouchEvent) => {
-      // REMOVED THE PROBLEMATIC isDown CHECK!
-      if (!isDragging.current || !container.current) return;
+      if (!isPressed.current || !container.current) return;
 
-      preventDefaultMove(event);
-      onMove(getRelativePosition(container.current, event, touchId.current));
+      event.preventDefault();
+      onMove(getRelativePosition(container.current, event));
     },
     [onMove]
   );
 
   const handleMoveEnd = useCallback(() => {
-    isDragging.current = false; // Set dragging to false
-    touchId.current = null;
+    isPressed.current = false;
 
     document.removeEventListener('mousemove', handleMove);
     document.removeEventListener('mouseup', handleMoveEnd);
@@ -81,27 +76,21 @@ export const Interactive: React.FC<InteractiveProps> = ({ onMove, onKey, childre
 
   const handleMoveStart = useCallback(
     (event: React.MouseEvent | React.TouchEvent) => {
-      const el = container.current;
-      if (!el) return;
+      const element = container.current;
+      if (!element) return;
 
-      preventDefaultMove(event.nativeEvent);
+      event.preventDefault();
 
-      if (isInvalid(event.nativeEvent, hasTouch.current)) return;
+      isPressed.current = true;
 
-      isDragging.current = true; // Set dragging to true
+      // Update position immediately
+      onMove(getRelativePosition(element, event.nativeEvent));
 
-      if (isTouch(event.nativeEvent)) {
-        hasTouch.current = true;
-        const changedTouches = event.nativeEvent.changedTouches || [];
-        if (changedTouches.length) touchId.current = changedTouches[0].identifier;
-      }
-
-      el.focus();
-      onMove(getRelativePosition(el, event.nativeEvent, touchId.current));
-
-      const touch = hasTouch.current;
-      document.addEventListener(touch ? 'touchmove' : 'mousemove', handleMove, { passive: false });
-      document.addEventListener(touch ? 'touchend' : 'mouseup', handleMoveEnd);
+      // Add event listeners
+      document.addEventListener('mousemove', handleMove);
+      document.addEventListener('mouseup', handleMoveEnd);
+      document.addEventListener('touchmove', handleMove, { passive: false });
+      document.addEventListener('touchend', handleMoveEnd);
     },
     [onMove, handleMove, handleMoveEnd]
   );
@@ -124,6 +113,7 @@ export const Interactive: React.FC<InteractiveProps> = ({ onMove, onKey, childre
     [onKey]
   );
 
+  // Clean up event listeners on unmount
   useEffect(() => {
     return () => {
       document.removeEventListener('mousemove', handleMove);

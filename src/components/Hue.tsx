@@ -16,7 +16,8 @@ const round = (num: number): number => Math.round(num);
 export const Hue: React.FC<HueProps> = ({ hue, onChange, className }) => {
   const handleMove = useCallback(
     (interaction: Interaction) => {
-      onChange({ h: 360 * interaction.left });
+      const h = round(clamp(360 * interaction.left, 0, 360));
+      onChange({ h });
     },
     [onChange]
   );
