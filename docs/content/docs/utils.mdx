@@ -1,0 +1,214 @@
+---
+title: Color Utilities
+description: Public utility functions for color conversion and manipulation
+---
+
+import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
+
+## Overview
+
+React Beautiful Color provides a comprehensive set of utility functions for color conversion and manipulation. These utilities are available for public use and can help you work with colors in your applications.
+
+## Color Conversion
+
+### Hex Conversions
+
+<Tabs items={['hexToRgb', 'hexToHsv', 'hexToHsl']}>
+  <Tab value="hexToRgb">
+    ```tsx
+    import { hexToRgb } from 'react-beautiful-color';
+
+    const rgb = hexToRgb('#ff6b9d');
+    // { r: 255, g: 107, b: 157 }
+    ```
+  </Tab>
+  
+  <Tab value="hexToHsv">
+    ```tsx
+    import { hexToHsv } from 'react-beautiful-color';
+
+    const hsv = hexToHsv('#ff6b9d');
+    // { h: 334, s: 58, v: 100 }
+    ```
+  </Tab>
+  
+  <Tab value="hexToHsl">
+    ```tsx
+    import { hexToHsl } from 'react-beautiful-color';
+
+    const hsl = hexToHsl('#ff6b9d');
+    // { h: 334, s: 100, l: 71 }
+    ```
+  </Tab>
+</Tabs>
+
+### RGB Conversions
+
+<Tabs items={['rgbToHex', 'rgbToHsv', 'rgbToHsl']}>
+  <Tab value="rgbToHex">
+    ```tsx
+    import { rgbToHex } from 'react-beautiful-color';
+
+    const hex = rgbToHex({ r: 255, g: 107, b: 157 });
+    // "#ff6b9d"
+    ```
+  </Tab>
+  
+  <Tab value="rgbToHsv">
+    ```tsx
+    import { rgbToHsv } from 'react-beautiful-color';
+
+    const hsv = rgbToHsv({ r: 255, g: 107, b: 157 });
+    // { h: 334, s: 58, v: 100 }
+    ```
+  </Tab>
+  
+  <Tab value="rgbToHsl">
+    ```tsx
+    import { rgbToHsl } from 'react-beautiful-color';
+
+    const hsl = rgbToHsl({ r: 255, g: 107, b: 157 });
+    // { h: 334, s: 100, l: 71 }
+    ```
+  </Tab>
+</Tabs>
+
+### HSV Conversions
+
+<Tabs items={['hsvToRgb', 'hsvToHex', 'hsvToHsl']}>
+  <Tab value="hsvToRgb">
+    ```tsx
+    import { hsvToRgb } from 'react-beautiful-color';
+
+    const rgb = hsvToRgb({ h: 334, s: 58, v: 100 });
+    // { r: 255, g: 107, b: 157 }
+    ```
+  </Tab>
+  
+  <Tab value="hsvToHex">
+    ```tsx
+    import { hsvToHex } from 'react-beautiful-color';
+
+    const hex = hsvToHex({ h: 334, s: 58, v: 100 });
+    // "#ff6b9d"
+    ```
+  </Tab>
+  
+  <Tab value="hsvToHsl">
+    ```tsx
+    import { hsvToHsl } from 'react-beautiful-color';
+
+    const hsl = hsvToHsl({ h: 334, s: 58, v: 100 });
+    // { h: 334, s: 100, l: 71 }
+    ```
+  </Tab>
+</Tabs>
+
+### HSL Conversions
+
+<Tabs items={['hslToRgb', 'hslToHex', 'hslToHsv']}>
+  <Tab value="hslToRgb">
+    ```tsx
+    import { hslToRgb } from 'react-beautiful-color';
+
+    const rgb = hslToRgb({ h: 334, s: 100, l: 71 });
+    // { r: 255, g: 107, b: 157 }
+    ```
+  </Tab>
+  
+  <Tab value="hslToHex">
+    ```tsx
+    import { hslToHex } from 'react-beautiful-color';
+
+    const hex = hslToHex({ h: 334, s: 100, l: 71 });
+    // "#ff6b9d"
+    ```
+  </Tab>
+  
+  <Tab value="hslToHsv">
+    ```tsx
+    import { hslToHsv } from 'react-beautiful-color';
+
+    const hsv = hslToHsv({ h: 334, s: 100, l: 71 });
+    // { h: 334, s: 58, v: 100 }
+    ```
+  </Tab>
+</Tabs>
+
+## Utility Functions
+
+### getContrastColor
+
+Returns the best contrast color (black or white) for accessibility.
+
+```tsx
+import { getContrastColor } from 'react-beautiful-color';
+
+const textColor = getContrastColor('#ff6b9d');
+// "#000000" (black for light backgrounds)
+
+const textColor2 = getContrastColor('#1a1a1a');
+// "#ffffff" (white for dark backgrounds)
+```
+
+### randomHex
+
+Generates a random hex color.
+
+```tsx
+import { randomHex } from 'react-beautiful-color';
+
+const color = randomHex();
+// "#a1b2c3" (random hex color)
+```
+
+### formatColorString
+
+Formats a ColorState object into a CSS color string.
+
+```tsx
+import { formatColorString, useColorState } from 'react-beautiful-color';
+
+const [{ colorState }] = useColorState({ type: 'hex', value: '#ff6b9d' });
+
+const hex = formatColorString(colorState, 'hex');        // "#ff6b9d"
+const rgb = formatColorString(colorState, 'rgb');        // "rgb(255, 107, 157)"
+const rgba = formatColorString(colorState, 'rgba');      // "rgba(255, 107, 157, 1)"
+const hsl = formatColorString(colorState, 'hsl');        // "hsl(334, 100%, 71%)"
+const hsla = formatColorString(colorState, 'hsla');      // "hsla(334, 100%, 71%, 1)"
+```
+
+## Type Definitions
+
+All utility functions work with these type definitions:
+
+```tsx
+interface RgbColor {
+  r: number; // 0-255
+  g: number; // 0-255
+  b: number; // 0-255
+}
+
+interface HslColor {
+  h: number; // 0-360
+  s: number; // 0-100
+  l: number; // 0-100
+}
+
+interface HsvColor {
+  h: number; // 0-360
+  s: number; // 0-100
+  v: number; // 0-100
+}
+
+interface ColorState {
+  hex: string;
+  rgb: RgbColor;
+  rgba: RgbaColor;
+  hsl: HslColor;
+  hsla: HslaColor;
+  hsv: HsvColor;
+  hsva: HsvaColor;
+  alpha: number;
+}
+```
