@@ -1,6 +1,6 @@
 ---
 title: useColorState
-description: A powerful React hook for managing color state with automatic format conversion
+description: A powerful React hook for managing color state with automatic format conversion and format preservation
 ---
 
 import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
@@ -8,7 +8,8 @@ import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
 ## Features
 
 - **Multi-Format Support**: Handles hex, rgb, rgba, hsl, hsla, hsv, hsva
-- **Automatic Conversion**: All formats available instantly
+- **Format Preservation**: Maintains your original input format throughout color changes
+- **Automatic Conversion**: All formats (hex, rgb, hsl, hsv, alpha) available instantly via colorState
 - **Type Safety**: Full TypeScript support with type-safe inputs
 - **Alpha Channel**: Built-in transparency support
 
@@ -43,7 +44,7 @@ import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
     import { useColorState } from 'react-beautiful-color';
 
     function ColorDemo() {
-      const { color, setColor } = useColorState({
+      const [{ colorInput, colorState }, setColor] = useColorState({
         type: 'hex',
         value: '#ff6b9d'
       });
@@ -51,15 +52,16 @@ import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
       return (
         <div>
           <div 
-            style={{ backgroundColor: color.hex }}
+            style={{ backgroundColor: colorState.hex }}
             className="w-full h-20 rounded"
           />
           
           <div className="mt-4 space-y-2">
-            <div>Hex: {color.hex}</div>
-            <div>RGB: {color.rgb.r}, {color.rgb.g}, {color.rgb.b}</div>
-            <div>HSL: {color.hsl.h}°, {color.hsl.s}%, {color.hsl.l}%</div>
-            <div>Alpha: {Math.round(color.alpha * 100)}%</div>
+            <div>Input Format: {colorInput.type}</div>
+            <div>Hex: {colorState.hex}</div>
+            <div>RGB: {colorState.rgb.r}, {colorState.rgb.g}, {colorState.rgb.b}</div>
+            <div>HSL: {colorState.hsl.h}°, {colorState.hsl.s}%, {colorState.hsl.l}%</div>
+            <div>Alpha: {Math.round(colorState.alpha * 100)}%</div>
           </div>
         </div>
       );
@@ -78,10 +80,80 @@ import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
 
 ### Return Value
 
-| Property | Type | Description |
-|----------|------|-------------|
-| `color` | `ColorState` | Current color in all formats |
-| `setColor` | `(color: ColorInput) => void` | Update color from any format |
+Returns an array with two elements:
+
+```tsx
+[{ colorInput, colorState }, setColor]
+```
+
+| Index | Property | Type | Description |
+|-------|----------|------|-------------|
+| `[0]` | `colorInput` | `ColorInput` | Current color in the original format you specified |
+| `[0]` | `colorState` | `ColorState` | Current color in all formats - see ColorState Properties below |
+| `[1]` | `setColor` | `(color: ColorInput) => void` | Update color from any format |
+
+### ColorState - Access Every Color Format
+
+The `colorState` object contains the current color in **all supported formats**. You can access any color representation instantly:
+
+- **`colorState.hex`** - Hex string like `"#ff6b9d"`
+- **`colorState.rgb`** - RGB object with `r`, `g`, `b` values (0-255)
+- **`colorState.rgba`** - RGBA object with `r`, `g`, `b`, `a` values
+- **`colorState.hsl`** - HSL object with `h` (0-360°), `s`, `l` (0-100%)
+- **`colorState.hsla`** - HSLA object with `h`, `s`, `l`, `a` values
+- **`colorState.hsv`** - HSV object with `h` (0-360°), `s`, `v` (0-100%)
+- **`colorState.hsva`** - HSVA object with `h`, `s`, `v`, `a` values
+- **`colorState.alpha`** - Alpha value (0-1)
+
+**Example:**
+
+```tsx
+const [{ colorInput, colorState }, setColor] = useColorState({
+  type: 'hex', 
+  value: '#ff6b9d'
+});
+
+// Access any format instantly - no conversion needed!
+console.log(colorState.hex);          // "#ff6b9d"
+console.log(colorState.rgb.r);        // 255
+console.log(colorState.rgba.a);       // 1.0
+console.log(colorState.hsl.h);        // 334
+console.log(colorState.hsla.a);       // 1.0
+console.log(colorState.hsv.v);        // 100
+console.log(colorState.hsva.a);       // 1.0
+console.log(colorState.alpha);        // 1.0
+
+// Use directly in CSS
+<div style={{ 
+  backgroundColor: colorState.hex,
+  color: `rgba(${colorState.rgba.r}, ${colorState.rgba.g}, ${colorState.rgba.b}, ${colorState.rgba.a})`,
+  borderColor: `hsla(${colorState.hsla.h}, ${colorState.hsla.s}%, ${colorState.hsla.l}%, ${colorState.hsla.a})`
+}} />
+```
+
+## Format Preservation
+
+One of the key features is that `colorInput` always maintains your original format:
+
+```tsx
+// Initialize with HSVA
+const [{ colorInput, colorState }, setColor] = useColorState({
+  type: 'hsva',
+  h: 334,
+  s: 100,
+  v: 100,
+  a: 0.5
+});
+
+// Even after changing colors, colorInput stays HSVA format
+setColor({ type: 'hex', value: '#ff0000' });
+
+console.log(colorInput);
+// Still HSVA: { type: 'hsva', h: 0, s: 100, v: 100, a: 0.5 }
+
+console.log(colorState.hex);
+// "#ff0000"
+```
 
 ## Color Formats
 

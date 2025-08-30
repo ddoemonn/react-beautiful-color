@@ -8,7 +8,7 @@ The most flexible and beautiful color picker for React. Built with compound comp
 
 - **🧩 Compound Components** - Compose your own layout, unlike rigid alternatives
 - **🎨 Beautiful Design** - Clean, modern UI that fits any design system
-- **⚡ Powerful Hook** - `useColorState` with all color formats instantly available and type-safe input
+- **⚡ Smart Hook** - `useColorState` preserves your input format while providing all color formats instantly
 - **🪶 Lightweight** - Pure Tailwind CSS, no external dependencies
 - **🛠️ Fully Customizable** - Style and arrange components however you want
 
@@ -34,10 +34,10 @@ import { ColorPicker, useColorState } from 'react-beautiful-color';
 import { Pipette } from 'lucide-react';
 
 function App() {
-  const { color, setColor } = useColorState({ type: 'hex', value: '#3b82f6' });
+  const [{ colorInput, colorState }, setColor] = useColorState({ type: 'hex', value: '#3b82f6' });
 
   return (
-    <ColorPicker color={{ type: 'hex', value: color.hex }} onChange={setColor}>
+    <ColorPicker color={colorInput} onChange={setColor}>
       <ColorPicker.Saturation className="flex-1 mb-3" />
       
       <div className="flex items-center gap-3 p-3 pt-0">
@@ -57,13 +57,20 @@ function App() {
 
 ## Powerful State Hook
 
-```tsx
-const { color, setColor } = useColorState({ type: 'hex', value: '#3b82f6' });
+The `useColorState` hook returns an array with the current state and setter, similar to `useState`. The first element contains both the original input format and all color formats.
 
-// Access all formats instantly
-console.log(color.hex);   // "#3b82f6"
-console.log(color.rgb);   // { r: 59, g: 130, b: 246 }
-console.log(color.hsl);   // { h: 217, s: 91, l: 60 }
+```tsx
+const [{ colorInput, colorState }, setColor] = useColorState({ type: 'hsva', h: 334, s: 100, v: 100, a: 0.5 });
+
+// colorInput maintains your original format - stays as HSVA!
+console.log(colorInput);  // { type: 'hsva', h: 334, s: 100, v: 100, a: 0.5 }
+
+// colorState provides all formats instantly
+console.log(colorState.hex);   // "#ff6b9d"
+console.log(colorState.rgb);   // { r: 255, g: 107, b: 157 }
+console.log(colorState.hsl);   // { h: 334, s: 100, l: 71 }
+console.log(colorState.hsv);   // { h: 334, s: 58, v: 100 }
+console.log(colorState.alpha); // 0.5
 
 // Set any format with complete type safety
 setColor({ type: 'hex', value: '#ff0000' });
@@ -74,7 +81,8 @@ setColor({ type: 'hsl', h: 0, s: 100, l: 50 });
 setColor({ type: 'rgba', r: 255, g: 0, b: 0, a: 0.5 });
 setColor({ type: 'hsla', h: 0, s: 100, l: 50, a: 0.8 });
 setColor({ type: 'hsva', h: 0, s: 100, v: 100, a: 0.9 });
+
+// 🎯 Format preservation: If you initialize with HSVA, colorInput will always return HSVA format!
 ```
 
 <a href="https://www.buymeacoffee.com/ozergklp" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png" alt="Buy Me A Coffee" style="height: 41px !important;width: 174px !important;box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;-webkit-box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;" ></a>
-

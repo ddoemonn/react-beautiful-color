@@ -48,10 +48,10 @@ import 'react-beautiful-color/dist/react-beautiful-color.css';
 import { ColorPicker, useColorState } from 'react-beautiful-color';
 
 function App() {
-  const { color, setColor } = useColorState({ type: 'hex', value: '#3b82f6' });
+  const [{ colorInput, colorState }, setColor] = useColorState({ type: 'hex', value: '#3b82f6' });
 
   return (
-    <ColorPicker color={{ type: 'hex', value: color.hex }} onChange={setColor}>
+    <ColorPicker color={colorInput} onChange={setColor}>
       <ColorPicker.Saturation className="flex-1 mb-3" />
       
       <div className="flex items-center gap-3 p-3 pt-0">
@@ -71,7 +71,8 @@ function App() {
 
 - **🧩 Compound Components** - Compose your own layout
 - **🎨 Beautiful Design** - Clean, modern UI 
-- **⚡ Type-Safe API** - Full TypeScript support
+- **⚡ Smart Hook** - Format preservation with instant conversions
+- **🛡️ Type-Safe API** - Full TypeScript support
 - **🪶 Lightweight** - Pure Tailwind CSS, no dependencies
 
 

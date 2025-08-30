@@ -4,12 +4,12 @@ import { ColorPicker, useColorState } from 'react-beautiful-color';
 import { Pipette } from 'lucide-react';
 
 export function BasicColorPickerExample() {
-  const { color, setColor } = useColorState({ type: 'hex', value: '#ff6b9d' });
+  const [{ colorInput, colorState }, setColor] = useColorState({ type: 'hex', value: '#ff6b9d' });
 
   return (
     <div className="flex w-full items-center justify-center py-10">
       <ColorPicker
-        color={{ type: 'hex', value: color.hex }}
+        color={colorInput}
         onChange={setColor}
         className="border-fd-border rounded-2xl border bg-white shadow-lg dark:bg-black/200"
       >
@@ -36,29 +36,29 @@ export function BasicColorPickerExample() {
           <div className="space-y-3">
             <div className="flex items-center justify-between">
               <span className="text-muted-foreground text-sm font-medium">HEX</span>
-              <code className="bg-muted rounded px-2 py-1 font-mono text-sm">{color.hex}</code>
+              <code className="bg-muted rounded px-2 py-1 font-mono text-sm">{colorState.hex}</code>
             </div>
             <div className="flex items-center justify-between">
               <span className="text-muted-foreground text-sm font-medium">RGB</span>
               <code className="bg-muted rounded px-2 py-1 font-mono text-sm">
-                {color.rgb.r}, {color.rgb.g}, {color.rgb.b}
+                {colorState.rgb.r}, {colorState.rgb.g}, {colorState.rgb.b}
               </code>
             </div>
             <div className="flex items-center justify-between">
               <span className="text-muted-foreground text-sm font-medium">HSL</span>
               <code className="bg-muted rounded px-2 py-1 font-mono text-sm">
-                {color.hsl.h}°, {color.hsl.s}%, {color.hsl.l}%
+                {colorState.hsl.h}°, {colorState.hsl.s}%, {colorState.hsl.l}%
               </code>
             </div>
             <div className="flex items-center justify-between">
               <span className="text-muted-foreground text-sm font-medium">HSV</span>
               <code className="bg-muted rounded px-2 py-1 font-mono text-sm">
-                {color.hsv.h}°, {color.hsv.s}%, {color.hsv.v}%
+                {colorState.hsv.h}°, {colorState.hsv.s}%, {colorState.hsv.v}%
               </code>
             </div>
             <div className="flex items-center justify-between">
               <span className="text-muted-foreground text-sm font-medium">Alpha</span>
-              <code className="bg-muted rounded px-2 py-1 font-mono text-sm">{Math.round(color.alpha * 100)}%</code>
+              <code className="bg-muted rounded px-2 py-1 font-mono text-sm">{Math.round(colorState.alpha * 100)}%</code>
             </div>
           </div>
         </div>
@@ -67,8 +67,8 @@ export function BasicColorPickerExample() {
           <div
             className="border-border h-16 w-32 rounded-lg border-2 shadow-sm"
             style={{
-              backgroundColor: 'rgba(' + color.rgb.r + ', ' + color.rgb.g + ', ' + color.rgb.b + ', ' + color.alpha + ')',
-              ...(color.alpha < 1 && {
+              backgroundColor: 'rgba(' + colorState.rgb.r + ', ' + colorState.rgb.g + ', ' + colorState.rgb.b + ', ' + colorState.alpha + ')',
+              ...(colorState.alpha < 1 && {
                 backgroundImage:
                   'url(\'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill-opacity=".1"><rect x="8" width="8" height="8"/><rect y="8" width="8" height="8"/></svg>\')',
                 backgroundSize: '16px 16px',
@@ -82,23 +82,23 @@ export function BasicColorPickerExample() {
 }
 
 export function HueExample() {
-  const { color, setColor } = useColorState({ type: 'hex', value: '#ff6b9d' });
+  const [{ colorInput, colorState }, setColor] = useColorState({ type: 'hex', value: '#ff6b9d' });
 
   return (
     <div className="p-6">
       <div className="max-w-md">
         <h4 className="mb-3 text-sm font-medium">Hue Selector</h4>
         <ColorPicker
-          color={{ type: 'hex', value: color.hex }}
+          color={colorInput}
           onChange={setColor}
           className="mb-4 max-h-4"
         >
           <ColorPicker.Hue className="max-h-4" />
         </ColorPicker>
         <div className="space-y-1 text-sm">
-          <div>Current Hue: {Math.round(color.hsv.h)}°</div>
+          <div>Current Hue: {Math.round(colorState.hsv.h)}°</div>
           <div>
-            Color: <span className="font-mono">{color.hex}</span>
+            Color: <span className="font-mono">{colorState.hex}</span>
           </div>
         </div>
       </div>
@@ -107,14 +107,14 @@ export function HueExample() {
 }
 
 export function SaturationExample() {
-  const { color, setColor } = useColorState({ type: 'hex', value: '#ff6b9d' });
+  const [{ colorInput, colorState }, setColor] = useColorState({ type: 'hex', value: '#ff6b9d' });
 
   return (
     <div className="p-6">
       <div className="max-w-md">
         <h4 className="mb-3 text-sm font-medium">Saturation Selector</h4>
         <ColorPicker
-          color={{ type: 'hex', value: color.hex }}
+          color={colorInput}
           onChange={setColor}
           className="mb-4 max-h-40"
         >
@@ -122,10 +122,10 @@ export function SaturationExample() {
         </ColorPicker>
         <div className="space-y-1 text-sm">
           <div>
-            <div>Current Saturation: {Math.round(color.hsv.s)}%</div>
-            <div>Current Brightness: {Math.round(color.hsv.v)}%</div>
+            <div>Current Saturation: {Math.round(colorState.hsv.s)}%</div>
+            <div>Current Brightness: {Math.round(colorState.hsv.v)}%</div>
             <div>
-              Color: <span className="font-mono">{color.hex}</span>
+              Color: <span className="font-mono">{colorState.hex}</span>
             </div>
           </div>
         </div>
@@ -135,21 +135,21 @@ export function SaturationExample() {
 }
 
 export function AlphaExample() {
-  const { color, setColor } = useColorState({ type: 'hex', value: '#ff6b9d' });
+  const [{ colorInput, colorState }, setColor] = useColorState({ type: 'hex', value: '#ff6b9d' });
 
   return (
     <div className="p-6">
       <div className="max-w-md">
         <h4 className="mb-3 text-sm font-medium">Alpha Selector</h4>
         <ColorPicker
-          color={{ type: 'hex', value: color.hex }}
+          color={colorInput}
           onChange={setColor}
           className="mb-4 max-h-4"
         >
           <ColorPicker.Alpha className="max-h-4" />
         </ColorPicker>
         <div className="space-y-1 text-sm">
-          <div>Current Alpha: {Math.round(color.alpha * 100)}%</div>
+          <div>Current Alpha: {Math.round(colorState.alpha * 100)}%</div>
         </div>
       </div>
     </div>

@@ -24,23 +24,23 @@ import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
     import { ColorPicker, useColorState } from 'react-beautiful-color';
 
     export function HueExample() {
-      const { color, setColor } = useColorState({ type: 'hex', value: '#ff6b9d' });
+      const [{ colorInput, colorState }, setColor] = useColorState({ type: 'hex', value: '#ff6b9d' });
 
       return (
         <div className="p-6">
           <div className="max-w-md">
             <h4 className="mb-3 text-sm font-medium">Hue Selector</h4>
             <ColorPicker
-              color={{ type: 'hex', value: color.hex }}
+              color={colorInput}
               onChange={setColor}
               className="mb-4 max-h-4"
             >
               <ColorPicker.Hue className="max-h-4" />
             </ColorPicker>
             <div className="space-y-1 text-sm">
-              <div>Current Hue: {Math.round(color.hsv.h)}°</div>
+              <div>Current Hue: {Math.round(colorState.hsv.h)}°</div>
               <div>
-                Color: <span className="font-mono">{color.hex}</span>
+                Color: <span className="font-mono">{colorState.hex}</span>
               </div>
             </div>
           </div>

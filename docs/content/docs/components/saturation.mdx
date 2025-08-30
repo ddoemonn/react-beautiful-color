@@ -22,15 +22,17 @@ import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
   
   <Tab value="Code">
     ```tsx
+    import { ColorPicker, useColorState } from 'react-beautiful-color';
+
     export function SaturationExample() {
-  const { color, setColor } = useColorState({ type: 'hex', value: '#ff6b9d' });
+  const [{ colorInput, colorState }, setColor] = useColorState({ type: 'hex', value: '#ff6b9d' });
 
   return (
     <div className="p-6">
       <div className="max-w-md">
         <h4 className="mb-3 text-sm font-medium">Saturation Selector</h4>
         <ColorPicker
-          color={{ type: 'hex', value: color.hex }}
+          color={colorInput}
           onChange={setColor}
           className="mb-4 max-h-40"
         >
@@ -38,10 +40,10 @@ import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
         </ColorPicker>
         <div className="space-y-1 text-sm">
           <div>
-            <div>Current Saturation: {Math.round(color.hsv.s)}%</div>
-            <div>Current Brightness: {Math.round(color.hsv.v)}%</div>
+            <div>Current Saturation: {Math.round(colorState.hsv.s)}%</div>
+            <div>Current Brightness: {Math.round(colorState.hsv.v)}%</div>
             <div>
-              Color: <span className="font-mono">{color.hex}</span>
+              Color: <span className="font-mono">{colorState.hex}</span>
             </div>
           </div>
         </div>
