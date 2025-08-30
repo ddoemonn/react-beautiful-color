@@ -5,7 +5,7 @@ import { ArrowRight, Palette, Zap, Code, Sparkles, Pipette, Github, Package, Cof
 import { ColorPicker, useColorState } from 'react-beautiful-color';
 
 export default function HomePage() {
-  const { color, setColor } = useColorState({ type: 'hex', value: '#3b82f6' });
+  const { color, setColor } = useColorState({ type: 'hsva', h: 334, s: 100, v: 100, a: 0.5 });
 
   return (
     <main className="flex flex-1 flex-col">
@@ -79,7 +79,7 @@ export default function HomePage() {
 
           <div className="flex w-full justify-center">
             <ColorPicker
-              color={{ type: 'hex', value: color.hex }}
+              color={{ type: 'hsva', h: color.hsv.h, s: color.hsv.s, v: color.hsv.v, a: color.alpha }}
               onChange={setColor}
               className="border-fd-border rounded-2xl border bg-white shadow-lg dark:bg-black/200"
             >

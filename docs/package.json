@@ -15,7 +15,7 @@
     "lucide-react": "^0.542.0",
     "next": "15.5.0",
     "react": "^19.1.1",
-    "react-beautiful-color": "^1.9.2",
+    "react-beautiful-color": "^1.9.4",
     "react-dom": "^19.1.1"
   },
   "devDependencies": {
