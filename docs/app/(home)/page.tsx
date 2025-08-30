@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { ArrowRight, Palette, Zap, Code, Sparkles, Pipette, Github, Package, Coffee, Heart } from 'lucide-react';
+import { Palette, Zap, Code, Sparkles, Pipette, Github, Package, Coffee, Heart } from 'lucide-react';
 import { ColorPicker, useColorState } from 'react-beautiful-color';
 
 export default function HomePage() {
@@ -89,7 +89,7 @@ export default function HomePage() {
                 <ColorPicker.EyeDropper className="hover:bg-black/10 dark:hover:bg-white/10">
                   <Pipette
                     size={20}
-                    className="dark:text-white"
+                    className="text-black dark:text-white"
                   />
                 </ColorPicker.EyeDropper>
 
