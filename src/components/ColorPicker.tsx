@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback, useRef, createContext, useCont
 
 import type { ColorPickerProps } from '../types';
 
-import { hexToHsv, hsvToHex, parseColorString, cn } from '../utils';
+import { hexToHsv, hsvToHex, parseColorString, cn, rgbToHex, hslToHex } from '../utils';
 
 import { Alpha } from './Alpha';
 import { Hue } from './Hue';
@@ -37,10 +37,47 @@ interface ColorPickerMainProps extends Omit<ColorPickerProps, 'withEyeDropper'> 
 
 const ColorPickerMain: React.FC<ColorPickerMainProps> = ({ color = { type: 'hex', value: '#ff6b9d' }, onChange, className, children, ...rest }) => {
   const [hsva, setHsva] = useState<HsvaColor>(() => {
-    const hexColor = color.type === 'hex' ? color.value : '#ff6b9d';
-    const normalizedHex = parseColorString(hexColor);
-    const hsv = hexToHsv(normalizedHex);
-    return { ...hsv, a: 1 };
+    if (color.type === 'hex') {
+      const hexColor = color.value;
+      const normalizedHex = parseColorString(hexColor);
+      const hsv = hexToHsv(normalizedHex);
+      return { ...hsv, a: 1 };
+    } else if (color.type === 'rgb') {
+      const hexColor = rgbToHex({ r: color.r, g: color.g, b: color.b });
+      const normalizedHex = parseColorString(hexColor);
+      const hsv = hexToHsv(normalizedHex);
+      return { ...hsv, a: 1 };
+    } else if (color.type === 'rgba') {
+      const hexColor = rgbToHex({ r: color.r, g: color.g, b: color.b });
+      const normalizedHex = parseColorString(hexColor);
+      const hsv = hexToHsv(normalizedHex);
+      return { ...hsv, a: color.a };
+    } else if (color.type === 'hsl') {
+      const hexColor = hslToHex({ h: color.h, s: color.s, l: color.l });
+      const normalizedHex = parseColorString(hexColor);
+      const hsv = hexToHsv(normalizedHex);
+      return { ...hsv, a: 1 };
+    } else if (color.type === 'hsla') {
+      const hexColor = hslToHex({ h: color.h, s: color.s, l: color.l });
+      const normalizedHex = parseColorString(hexColor);
+      const hsv = hexToHsv(normalizedHex);
+      return { ...hsv, a: color.a };
+    } else if (color.type === 'hsv') {
+      const hexColor = hsvToHex({ h: color.h, s: color.s, v: color.v });
+      const normalizedHex = parseColorString(hexColor);
+      const hsv = hexToHsv(normalizedHex);
+      return { ...hsv, a: 1 };
+    } else if (color.type === 'hsva') {
+      const hexColor = hsvToHex({ h: color.h, s: color.s, v: color.v });
+      const normalizedHex = parseColorString(hexColor);
+      const hsv = hexToHsv(normalizedHex);
+      return { ...hsv, a: color.a };
+    } else {
+      const hexColor = '#ff6b9d';
+      const normalizedHex = parseColorString(hexColor);
+      const hsv = hexToHsv(normalizedHex);
+      return { ...hsv, a: 1 };
+    }
   });
 
   const lastExternalColor = useRef(color);
