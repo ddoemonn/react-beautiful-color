@@ -8,9 +8,6 @@ import { cn } from 'fumadocs-ui/utils/cn';
 export default function HomePage() {
   const [{ colorInput, colorState }, setColor] = useColorState({ type: 'hsva', h: 334, s: 100, v: 100, a: 0.5 });
 
-  console.log(colorState, 'colorState');
-
-  console.log(colorInput, 'colorInput');
   return (
     <main className="flex flex-1 flex-col">
       {/* Hero Section */}
