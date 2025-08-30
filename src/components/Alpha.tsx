@@ -59,6 +59,7 @@ export const Alpha: React.FC<AlphaProps> = ({ hsva, onChange, className }) => {
         aria-valuemin={0}
         aria-valuemax={100}
         className="h-full w-full rounded-lg"
+        pointer={{ left: hsva.a, top: 0.5 }}
       >
         <div
           className="absolute inset-0 rounded-lg bg-white"
@@ -73,13 +74,6 @@ export const Alpha: React.FC<AlphaProps> = ({ hsva, onChange, className }) => {
           style={{
             backgroundImage: `linear-gradient(90deg, ${colorFrom}, ${colorTo})`,
           }}
-        />
-
-        <Pointer
-          className="z-[1]"
-          top={0.5}
-          left={hsva.a}
-          color=""
         />
       </Interactive>
     </div>

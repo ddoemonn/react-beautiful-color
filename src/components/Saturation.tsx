@@ -51,6 +51,7 @@ export const Saturation: React.FC<SaturationProps> = ({ hsva, onChange, classNam
         aria-label="Color"
         aria-valuetext={`Saturation ${round(hsva.s)}%, Brightness ${round(hsva.v)}%`}
         className="h-full w-full rounded-xl"
+        pointer={{ top: 1 - hsva.v / 100, left: hsva.s / 100 }}
       >
         <div
           className="absolute inset-0 rounded-xl rounded-b-none"
@@ -59,13 +60,6 @@ export const Saturation: React.FC<SaturationProps> = ({ hsva, onChange, classNam
             backgroundImage: 'linear-gradient(to top, #000, rgba(0, 0, 0, 0)), linear-gradient(to right, #fff, rgba(255, 255, 255, 0))',
             boxShadow: 'inset 0 0 0 1px rgba(0, 0, 0, 0.05)',
           }}
-        />
-
-        <Pointer
-          className="z-[3]"
-          top={1 - hsva.v / 100}
-          left={hsva.s / 100}
-          color=""
         />
       </Interactive>
     </div>

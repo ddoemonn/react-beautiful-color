@@ -135,6 +135,14 @@ export const Interactive: React.FC<InteractiveProps> = ({ onMove, onKey, childre
       {...ariaProps}
     >
       {children}
+      <Pointer
+        className={cn('z-[1]', pointer.className)}
+        top={pointer.top ?? 0.5}
+        left={pointer.left}
+        onMouseDown={handleMoveStart}
+        onTouchStart={handleMoveStart}
+        onKeyDown={handleKeyDown}
+      />
     </div>
   );
 };
