@@ -2,6 +2,7 @@ import React, { useCallback } from 'react';
 import { cn } from '../utils';
 import { clamp, round } from '../utils/internal';
 import { Interaction, Interactive } from './Interactive';
+import { Pointer } from './Pointer';
 
 interface HsvaColor {
   h: number;

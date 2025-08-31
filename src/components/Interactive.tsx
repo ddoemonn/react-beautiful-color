@@ -2,7 +2,6 @@ import React, { useCallback, useEffect, useRef } from 'react';
 
 import { cn } from '../utils';
 import { clamp } from '../utils/internal';
-import { Pointer, PointerProps } from './Pointer';
 
 export interface Interaction {
   left: number;
@@ -20,7 +19,6 @@ interface InteractiveProps {
   'aria-valuemax'?: number;
   'aria-valuemin'?: number;
   'aria-valuetext'?: string;
-  pointer: Pick<PointerProps, 'className' | 'top' | 'left'>;
 }
 
 // Simple and reliable position calculation based on react-colorful approach
@@ -53,7 +51,7 @@ const getRelativePosition = (element: HTMLElement, event: MouseEvent | TouchEven
   return { left, top };
 };
 
-export const Interactive: React.FC<InteractiveProps> = ({ onMove, onMoveEnd, onKey, children, className, pointer, ...ariaProps }) => {
+export const Interactive: React.FC<InteractiveProps> = ({ onMove, onMoveEnd, onKey, children, className, ...ariaProps }) => {
   const container = useRef<HTMLDivElement>(null);
   const isPressed = useRef(false);
 
