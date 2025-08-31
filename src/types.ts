@@ -34,6 +34,17 @@ export type HexColor = string;
 
 export type ColorFormat = 'hex' | 'rgb' | 'rgba' | 'hsl' | 'hsla' | 'hsv' | 'hsva';
 
+export interface ColorState {
+  hex: string;
+  rgb: RgbColor;
+  rgba: RgbaColor;
+  hsl: HslColor;
+  hsla: HslaColor;
+  hsv: HsvColor;
+  hsva: HsvaColor;
+  alpha: number;
+}
+
 // Type-safe color input objects using discriminated unions
 export type ColorInput =
   | { type: 'hex'; value: string }
@@ -44,12 +55,30 @@ export type ColorInput =
   | { type: 'hsv'; h: number; s: number; v: number }
   | { type: 'hsva'; h: number; s: number; v: number; a: number };
 
+export interface UseColorStateReturn {
+  color: ColorState;
+  setColor: (color: ColorInput) => void;
+  setAlpha: (alpha: number) => void;
+  setFromRgb: (rgb: RgbColor) => void;
+  setFromHsl: (hsl: HslColor) => void;
+  setFromHsv: (hsv: HsvColor) => void;
+}
+
+// New array-style return type
+export type UseColorStateArrayReturn = [
+  {
+    colorInput: ColorInput;
+    colorState: ColorState;
+  },
+  (color: ColorInput) => void,
+];
+
 export interface ColorPickerProps {
   defaultColor?: Color | ColorInput;
   color?: Color | ColorInput;
   onChange?: (color: Color) => void;
   className?: string;
-  withEyeDropper: boolean;
+  withEyeDropper?: boolean;
 }
 
 export class Color {
