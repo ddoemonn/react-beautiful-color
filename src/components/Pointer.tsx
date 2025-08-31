@@ -12,7 +12,7 @@ export const Pointer: React.FC<PointerProps> = ({ className, top = 0.5, left, co
   return (
     <div
       className={cn(
-        'pointer-events-none absolute z-[1] h-6 w-6 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-white bg-white',
+        'absolute z-[1] h-6 w-6 -translate-x-1/2 -translate-y-1/2 cursor-grab rounded-full border-2 border-white bg-white active:cursor-grabbing',
         'react-colorful-pointer shadow-[0_2px_8px_rgba(0,0,0,0.15)] transition-transform',
         className
       )}
