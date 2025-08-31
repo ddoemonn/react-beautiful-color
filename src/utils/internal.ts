@@ -1,12 +1,11 @@
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
-import type { ColorState, ColorInput } from '../types';
 
 export const cn = (...inputs: ClassValue[]) => twMerge(clsx(inputs));
 
 export const clamp = (num: number, min: number, max: number): number => Math.min(Math.max(num, min), max);
 
-export const round = (num: number): number => Math.round(clamp(num, 0, 255));
+export const round = (num: number): number => Math.round(num);
 
 export const isValidHex = (hex: string): boolean => {
   const h = hex.replace('#', '');
@@ -91,93 +90,9 @@ export const parseColorString = (input: string): string => {
   return '#ff0000';
 };
 
-export const createColorState = (input: string, fallbackAlpha: number = 1): ColorState => {
-  let alpha = fallbackAlpha;
-
-  if (input.startsWith('#')) {
-    const h = input.replace('#', '');
-    if (h.length === 8) {
-      alpha = extractAlphaFromHex(input);
-    }
-  }
-
-  const normalizedHex = parseColorString(input);
-  const rgb = hexToRgb(normalizedHex);
-  const hsv = rgbToHsv(rgb);
-  const hsl = rgbToHsl(rgb);
-
-  return {
-    hex: normalizedHex,
-    rgb,
-    rgba: { ...rgb, a: alpha },
-    hsl,
-    hsla: { ...hsl, a: alpha },
-    hsv,
-    hsva: { ...hsv, a: alpha },
-    alpha,
-  };
-};
-
-export const createColorStateFromInput = (colorInput: ColorInput): ColorState => {
-  let hexColor: string;
-  let alpha: number;
-
-  switch (colorInput.type) {
-    case 'hex':
-      hexColor = colorInput.value;
-      alpha = extractAlphaFromHex(colorInput.value);
-      break;
-    case 'rgb':
-      hexColor = rgbToHex(colorInput);
-      alpha = 1;
-      break;
-    case 'rgba':
-      hexColor = rgbToHex(colorInput);
-      alpha = colorInput.a;
-      break;
-    case 'hsl':
-      hexColor = hslToHex(colorInput);
-      alpha = 1;
-      break;
-    case 'hsla':
-      hexColor = hslToHex(colorInput);
-      alpha = colorInput.a;
-      break;
-    case 'hsv':
-      hexColor = hsvToHex(colorInput);
-      alpha = 1;
-      break;
-    case 'hsva':
-      hexColor = hsvToHex(colorInput);
-      alpha = colorInput.a;
-      break;
-    default:
-      throw new Error(`Unsupported color type: ${(colorInput as { type: string }).type}`);
-  }
-
-  return createColorState(hexColor, alpha);
-};
-
-export const colorStateToInput = (colorState: ColorState, targetType: ColorInput['type']): ColorInput => {
-  switch (targetType) {
-    case 'hex':
-      return { type: 'hex', value: colorState.hex };
-    case 'rgb':
-      return { type: 'rgb', r: colorState.rgb.r, g: colorState.rgb.g, b: colorState.rgb.b };
-    case 'rgba':
-      return { type: 'rgba', r: colorState.rgba.r, g: colorState.rgba.g, b: colorState.rgba.b, a: colorState.rgba.a };
-    case 'hsl':
-      return { type: 'hsl', h: colorState.hsl.h, s: colorState.hsl.s, l: colorState.hsl.l };
-    case 'hsla':
-      return { type: 'hsla', h: colorState.hsla.h, s: colorState.hsla.s, l: colorState.hsla.l, a: colorState.hsla.a };
-    case 'hsv':
-      return { type: 'hsv', h: colorState.hsv.h, s: colorState.hsv.s, v: colorState.hsv.v };
-    case 'hsva':
-      return { type: 'hsva', h: colorState.hsva.h, s: colorState.hsva.s, v: colorState.hsva.v, a: colorState.hsva.a };
-    default:
-      throw new Error(`Unsupported color type: ${targetType}`);
-  }
-};
-
 // Import functions from public for internal use
-import { hexToRgb, rgbToHex, rgbToHsv, rgbToHsl, hslToHex, hsvToHex } from './public';
+import { hslToHex, rgbToHex } from './public';
+
+export function assertUnreachable(_x: never): never {
+  throw new Error('You should never get here.');
+}

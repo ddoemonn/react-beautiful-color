@@ -1,30 +1,26 @@
 // Export all public color utilities for external use
 export {
-  // Hex conversions
-  hexToRgb,
-  hexToHsv,
-  hexToHsl,
-
-  // RGB conversions
-  rgbToHex,
-  rgbToHsv,
-  rgbToHsl,
-
-  // HSV conversions
-  hsvToRgb,
-  hsvToHex,
-  hsvToHsl,
-
-  // HSL conversions
-  hslToRgb,
-  hslToHex,
-  hslToHsv,
-
+  formatColorString,
   // Utility functions
   getContrastColor,
+  hexToHsl,
+  hexToHsv,
+  // Hex conversions
+  hexToRgb,
+  hslToHex,
+  hslToHsv,
+  // HSL conversions
+  hslToRgb,
+  hsvToHex,
+  hsvToHsl,
+  // HSV conversions
+  hsvToRgb,
   randomHex,
-  formatColorString,
+  // RGB conversions
+  rgbToHex,
+  rgbToHsl,
+  rgbToHsv,
 } from './public';
 
 // Re-export types for convenience
-export type { RgbColor, HsvColor, HslColor, ColorState, ColorInput } from '../types';
+export type { ColorInput, HslColor, HsvColor, RgbColor } from '../types';

@@ -1,7 +1,9 @@
-import React, { useCallback } from 'react';
-import { Interactive, Interaction } from './Interactive';
-import { Pointer } from './Pointer';
+import React, { useCallback, useMemo } from 'react';
+import { Color } from '../types';
 import { cn } from '../utils';
+import { clamp, round } from '../utils/internal';
+import { Interaction, Interactive } from './Interactive';
+import { Pointer } from './Pointer';
 
 interface HsvaColor {
   h: number;
@@ -12,46 +14,39 @@ interface HsvaColor {
 
 interface AlphaProps {
   hsva: HsvaColor;
-  onChange: (newAlpha: { a: number }) => void;
+  onChange: (newAlpha: { a: number }, finishedUpdates: boolean) => void;
   className?: string;
+  onFinishedUpdates: () => void;
 }
 
-const clamp = (num: number, min = 0, max = 1): number => Math.min(Math.max(num, min), max);
-
-const round = (num: number): number => Math.round(num);
-
-const hsvaToHslaString = (hsva: HsvaColor): string => {
-  const { h, s, v, a } = hsva;
-  const l = (v * (2 - s / 100)) / 2;
-  const sL = l !== 0 && l !== 100 ? ((v - l) / Math.min(l, 100 - l)) * 100 : 0;
-
-  return `hsla(${round(h)}, ${round(sL)}%, ${round(l)}%, ${a})`;
-};
-
-export const Alpha: React.FC<AlphaProps> = ({ hsva, onChange, className }) => {
+export const Alpha: React.FC<AlphaProps> = ({ hsva, onChange, className, onFinishedUpdates }) => {
   const handleMove = useCallback(
     (interaction: Interaction) => {
-      onChange({ a: interaction.left });
+      onChange({ a: interaction.left }, false);
     },
     [onChange]
   );
 
   const handleKey = useCallback(
     (offset: Interaction) => {
-      onChange({
-        a: clamp(hsva.a + offset.left),
-      });
+      onChange(
+        {
+          a: clamp(hsva.a + offset.left, 0, 1),
+        },
+        true
+      );
     },
     [hsva.a, onChange]
   );
 
-  const colorFrom = hsvaToHslaString({ ...hsva, a: 0 });
-  const colorTo = hsvaToHslaString({ ...hsva, a: 1 });
+  const colorFrom = useMemo(() => new Color({ type: 'hsva', h: hsva.h, s: hsva.s, v: hsva.v, a: 0 }).format('hsla'), [hsva.h, hsva.s, hsva.v]);
+  const colorTo = useMemo(() => new Color({ type: 'hsva', h: hsva.h, s: hsva.s, v: hsva.v, a: 1 }).format('hsla'), [hsva.h, hsva.s, hsva.v]);
 
   return (
     <div className={cn('relative h-full w-full', className)}>
       <Interactive
         onMove={handleMove}
+        onMoveEnd={onFinishedUpdates}
         onKey={handleKey}
         aria-label="Alpha"
         aria-valuetext={`${round(hsva.a * 100)}%`}

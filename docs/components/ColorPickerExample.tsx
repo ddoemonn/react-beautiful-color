@@ -1,13 +1,13 @@
 'use client';
 
-import { ColorPicker, useColorState } from 'react-beautiful-color';
 import { Pipette } from 'lucide-react';
+import { ColorPicker, useColorState } from 'react-beautiful-color';
 
 export function BasicColorPickerExample() {
   const [{ colorInput, colorState }, setColor] = useColorState({ type: 'hex', value: '#ff6b9d' });
 
   return (
-    <div className="flex w-full items-center justify-center py-10">
+    <div className="flex w-full flex-col items-center justify-center py-10 sm:flex-row">
       <ColorPicker
         color={colorInput}
         onChange={setColor}

@@ -1,32 +1,33 @@
 import React, { useCallback } from 'react';
-import { Interactive, Interaction } from './Interactive';
-import { Pointer } from './Pointer';
 import { cn } from '../utils';
+import { clamp, round } from '../utils/internal';
+import { Interaction, Interactive } from './Interactive';
+import { Pointer } from './Pointer';
 
 interface HueProps {
   hue: number;
-  onChange: (newHue: { h: number }) => void;
+  onChange: (newHue: { h: number }, finishedUpdates: boolean) => void;
   className?: string;
+  onFinishedUpdates: () => void;
 }
 
-const clamp = (num: number, min: number, max: number): number => Math.min(Math.max(num, min), max);
-
-const round = (num: number): number => Math.round(num);
-
-export const Hue: React.FC<HueProps> = ({ hue, onChange, className }) => {
+export const Hue: React.FC<HueProps> = ({ hue, onChange, className, onFinishedUpdates }) => {
   const handleMove = useCallback(
     (interaction: Interaction) => {
       const h = round(clamp(360 * interaction.left, 0, 360));
-      onChange({ h });
+      onChange({ h }, false);
     },
     [onChange]
   );
 
   const handleKey = useCallback(
     (offset: Interaction) => {
-      onChange({
-        h: clamp(hue + offset.left * 360, 0, 360),
-      });
+      onChange(
+        {
+          h: clamp(hue + offset.left * 360, 0, 360),
+        },
+        true
+      );
     },
     [hue, onChange]
   );
@@ -35,6 +36,7 @@ export const Hue: React.FC<HueProps> = ({ hue, onChange, className }) => {
     <div className={cn('relative h-full w-full', className)}>
       <Interactive
         onMove={handleMove}
+        onMoveEnd={onFinishedUpdates}
         onKey={handleKey}
         aria-label="Hue"
         aria-valuenow={round(hue)}
