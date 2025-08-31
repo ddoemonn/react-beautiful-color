@@ -193,7 +193,14 @@ interface CompoundEyeDropperProps {
 const CompoundEyeDropper = ({ className, size = 18, title = 'Pick color from screen', children }: CompoundEyeDropperProps) => {
   const { handleEyeDropper } = useColorPickerContext();
 
-  if (!('EyeDropper' in window)) {
+  const [supported, setSupported] = useState(false);
+  useEffect(() => {
+    if (typeof window !== 'undefined' && 'EyeDropper' in window) {
+      setSupported(true);
+    }
+  }, []);
+
+  if (!supported) {
     return null;
   }
   return (
