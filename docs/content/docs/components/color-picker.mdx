@@ -16,7 +16,7 @@ import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
 
 ## Basic Usage
 
-<Tabs items={['Preview', 'Code']}>
+<Tabs items={['Preview', 'Code', 'Code without hook']}>
   <Tab value="Preview">
     <BasicColorPickerExample />
   </Tab>
@@ -103,14 +103,105 @@ export function BasicColorPickerExample() {
 }
     ```
   </Tab>
+
+  <Tab value='Code without hook'>
+    ```tsx
+import { ColorPicker, Color } from 'react-beautiful-color';
+import { Pipette } from 'lucide-react';
+
+export function BasicColorPickerExampleUseState() {
+        const [color, setColor] = useState(new Color({ type: 'hex', value: '#ff6b9d' }));
+
+        const rgba = color.getRgba();
+        const hex = color.getHex();
+        const hsl = color.getHsl();
+        const hsv = color.getHsv();
+
+        return (
+            <div className="flex w-full items-center justify-center py-10">
+                <ColorPicker
+                    color={color}
+                    onChange={setColor}
+                    className="border-fd-border rounded-2xl border bg-white shadow-lg dark:bg-black/200"
+                >
+                    <ColorPicker.Saturation className="mb-3 flex-1" />
+
+                    <div className="flex items-center gap-3 p-3 pt-0">
+                        <ColorPicker.EyeDropper className="hover:bg-black/10 dark:hover:bg-white/10">
+                            <Pipette
+                            size={20}
+                            className="dark:text-white"
+                            />
+                        </ColorPicker.EyeDropper>
+
+                        <div className="flex flex-1 flex-col gap-3">
+                            <ColorPicker.Hue className="h-4" />
+                            <ColorPicker.Alpha className="h-4" />
+                        </div>
+                    </div>
+                </ColorPicker>
+
+                <div className="mt-20 ml-8 flex min-w-64 flex-col">
+                    <div className="bg-card mb-4 rounded-lg border p-4">
+                        <h4 className="text-card-foreground mb-3 text-sm font-semibold">Color Values</h4>
+                        <div className="space-y-3">
+                            <div className="flex items-center justify-between">
+                                <span className="text-muted-foreground text-sm font-medium">HEX</span>
+                                <code className="bg-muted rounded px-2 py-1 font-mono text-sm">{hex}</code>
+                            </div>
+                            <div className="flex items-center justify-between">
+                                <span className="text-muted-foreground text-sm font-medium">RGB</span>
+                                <code className="bg-muted rounded px-2 py-1 font-mono text-sm">
+                                {rgba.r}, {rgba.g}, {rgba.b}
+                            </code>
+                            </div>
+                                <div className="flex items-center justify-between">
+                                <span className="text-muted-foreground text-sm font-medium">HSL</span>
+                                <code className="bg-muted rounded px-2 py-1 font-mono text-sm">
+                                {hsl.h}°, {hsl.s}%, {hsl.l}%
+                            </code>
+                            </div>
+                                <div className="flex items-center justify-between">
+                                <span className="text-muted-foreground text-sm font-medium">HSV</span>
+                                <code className="bg-muted rounded px-2 py-1 font-mono text-sm">
+                                {hsv.h}°, {hsv.s}%, {hsv.v}%
+                            </code>
+                            </div>
+                                <div className="flex items-center justify-between">
+                                <span className="text-muted-foreground text-sm font-medium">Alpha</span>
+                                <code className="bg-muted rounded px-2 py-1 font-mono text-sm">{Math.round(rgba.a * 100)}%</code>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="flex items-center justify-center">
+                        <div
+                            className="border-border h-16 w-32 rounded-lg border-2 shadow-sm"
+                            style={{
+                            backgroundColor: 'rgba(' + rgba.r + ', ' + rgba.g + ', ' + rgba.b + ', ' + rgba.a + ')',
+                            ...(rgba.a < 1 && {
+                                backgroundImage:
+                                'url(\'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill-opacity=".1"><rect x="8" width="8" height="8"/><rect y="8" width="8" height="8"/></svg>\')',
+                                backgroundSize: '16px 16px',
+                            }),
+                            }}
+                        />
+                    </div>
+                </div>
+            </div>
+        );
+}
+  ```
+  </Tab>
 </Tabs>
 
 ## Props
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `color` | `ColorInput` | `{ type: 'hex', value: '#ff6b9d' }` | Initial color value |
-| `onChange` | `(color: ColorInput) => void` | - | Callback fired when color changes |
+| `defaultColor` | [ColorInput](/docs/components/color-picker#color-input-format) \| [Color](/docs/utils#color-class) | - | Initial color value |
+| `color` | [ColorInput](/docs/components/color-picker#color-input-format) \| [Color](/docs/utils#color-class) | - | Color value |
+| `onChange` | `(color: Color) => void` | - | Callback fired when color changes |
 | `className` | `string` | - | Additional CSS classes |
 
 ## Color Input Format

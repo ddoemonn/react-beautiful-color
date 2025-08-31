@@ -70,7 +70,7 @@ export type UseColorStateArrayReturn = [
     colorInput: ColorInput;
     colorState: ColorState;
   },
-  (color: ColorInput) => void,
+  (color: ColorInput | Color) => void,
 ];
 
 export interface ColorPickerProps {

@@ -8,29 +8,15 @@ import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
 ## Installation
 
 <Tabs items={['npm', 'yarn', 'pnpm', 'bun']}>
-  <Tab value="npm">
-    ```bash
-    npm install react-beautiful-color
-    ```
-  </Tab>
-  
-  <Tab value="yarn">
-    ```bash
-    yarn add react-beautiful-color
-    ```
-  </Tab>
-  
-  <Tab value="pnpm">
-    ```bash
-    pnpm add react-beautiful-color
-    ```
-  </Tab>
-  
-  <Tab value="bun">
-    ```bash
-    bun add react-beautiful-color
-    ```
-  </Tab>
+  <Tab value="npm">```bash npm install react-beautiful-color ```</Tab>
+
+{' '}
+<Tab value="yarn">```bash yarn add react-beautiful-color ```</Tab>
+
+{' '}
+<Tab value="pnpm">```bash pnpm add react-beautiful-color ```</Tab>
+
+  <Tab value="bun">```bash bun add react-beautiful-color ```</Tab>
 </Tabs>
 
 ## Setup
@@ -44,6 +30,8 @@ import 'react-beautiful-color/dist/react-beautiful-color.css';
 
 ## Basic Usage
 
+<Tabs items={['useColorState', 'useState']}>
+<Tab value='useColorState'>
 ```tsx
 import { ColorPicker, useColorState } from 'react-beautiful-color';
 
@@ -53,10 +41,10 @@ function App() {
   return (
     <ColorPicker color={colorInput} onChange={setColor}>
       <ColorPicker.Saturation className="flex-1 mb-3" />
-      
+
       <div className="flex items-center gap-3 p-3 pt-0">
         <ColorPicker.EyeDropper />
-        
+
         <div className="flex-1 flex flex-col gap-3">
           <ColorPicker.Hue className="h-4" />
           <ColorPicker.Alpha className="h-4" />
@@ -65,16 +53,43 @@ function App() {
     </ColorPicker>
   );
 }
-```
+
+````
+</Tab>
+<Tab value='useState'>
+```tsx
+import { ColorPicker, Color } from 'react-beautiful-color';
+
+function App() {
+  const [color, setColor] = useState(new Color({ type: 'hex', value: '#3b82f6' }));
+
+  return (
+    <ColorPicker color={color} onChange={setColor}>
+      <ColorPicker.Saturation className="flex-1 mb-3" />
+
+      <div className="flex items-center gap-3 p-3 pt-0">
+        <ColorPicker.EyeDropper />
+
+        <div className="flex-1 flex flex-col gap-3">
+          <ColorPicker.Hue className="h-4" />
+          <ColorPicker.Alpha className="h-4" />
+        </div>
+      </div>
+    </ColorPicker>
+  );
+}
+````
+
+</Tab>
+</Tabs>
 
 ## Key Features
 
 - **🧩 Compound Components** - Compose your own layout
-- **🎨 Beautiful Design** - Clean, modern UI 
+- **🎨 Beautiful Design** - Clean, modern UI
 - **⚡ Smart Hook** - Format preservation with instant conversions
 - **🛡️ Type-Safe API** - Full TypeScript support
 - **🪶 Lightweight** - Pure Tailwind CSS, no dependencies
-
 
 ## Next Steps
 

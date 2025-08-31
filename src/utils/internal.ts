@@ -5,7 +5,7 @@ export const cn = (...inputs: ClassValue[]) => twMerge(clsx(inputs));
 
 export const clamp = (num: number, min: number, max: number): number => Math.min(Math.max(num, min), max);
 
-export const round = (num: number): number => Math.round(clamp(num, 0, 255));
+export const round = (num: number): number => Math.round(num);
 
 export const isValidHex = (hex: string): boolean => {
   const h = hex.replace('#', '');

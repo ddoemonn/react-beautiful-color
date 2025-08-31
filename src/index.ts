@@ -3,6 +3,8 @@ import './styles.css';
 
 export { ColorPicker } from './components/ColorPicker';
 
+export { useColorState } from './hooks/useColorState';
+
 // Export color utilities for public use
 export * from './utils';
 
