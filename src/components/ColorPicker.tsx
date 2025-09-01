@@ -1,6 +1,6 @@
 import React, { createContext, useCallback, useContext, useEffect, useRef, useState } from 'react';
 
-import type { ColorInput, ColorPickerProps } from '../types';
+import type { ColorInput, ColorPickerProps, HsvaColor } from '../types';
 import { Color } from '../types';
 import { cn, hexToHsv, parseColorString } from '../utils';
 
@@ -8,13 +8,6 @@ import { convertColor } from '../utils';
 import { Alpha } from './Alpha';
 import { Hue } from './Hue';
 import { Saturation } from './Saturation';
-
-interface HsvaColor {
-  h: number;
-  s: number;
-  v: number;
-  a: number;
-}
 
 interface ColorPickerContextType {
   hsva: HsvaColor;

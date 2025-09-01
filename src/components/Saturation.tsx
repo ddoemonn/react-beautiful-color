@@ -3,13 +3,7 @@ import { cn } from '../utils';
 import { clamp, round } from '../utils/internal';
 import { Interaction, Interactive } from './Interactive';
 import { Pointer } from './Pointer';
-
-interface HsvaColor {
-  h: number;
-  s: number;
-  v: number;
-  a: number;
-}
+import { HsvaColor } from '../types';
 
 interface SaturationProps {
   hsva: HsvaColor;
