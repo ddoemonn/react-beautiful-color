@@ -342,38 +342,3 @@ const hslString = color.format('hsl'); // "hsl(334, 100%, 71%)"
 const contrastColor = color.getContrastingColor();
 const contrastHex = contrastColor.getHex(); // "#000000"
 ```
-
-## Type Definitions
-
-All utility functions work with these type definitions:
-
-```tsx
-interface RgbColor {
-  r: number; // 0-255
-  g: number; // 0-255
-  b: number; // 0-255
-}
-
-interface HslColor {
-  h: number; // 0-360
-  s: number; // 0-100
-  l: number; // 0-100
-}
-
-interface HsvColor {
-  h: number; // 0-360
-  s: number; // 0-100
-  v: number; // 0-100
-}
-
-interface ColorState {
-  hex: string;
-  rgb: RgbColor;
-  rgba: RgbaColor;
-  hsl: HslColor;
-  hsla: HslaColor;
-  hsv: HsvColor;
-  hsva: HsvaColor;
-  alpha: number;
-}
-```
