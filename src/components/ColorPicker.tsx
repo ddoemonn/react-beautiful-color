@@ -2,7 +2,7 @@ import React, { createContext, useCallback, useContext, useEffect, useRef, useSt
 
 import type { ColorInput, ColorPickerProps, HsvaColor } from '../types';
 import { Color } from '../types';
-import { cn, hexToHsv, parseColorString } from '../utils';
+import { cn } from '../utils';
 
 import { convertColor } from '../utils';
 import { Alpha } from './Alpha';
@@ -75,9 +75,6 @@ const ColorPickerMain = ({ color, onChange, className, children, defaultColor, .
       const eyeDropper = new window.EyeDropper();
       const result = await eyeDropper.open();
       if (result.sRGBHex) {
-        const normalizedColor = parseColorString(result.sRGBHex);
-        const newHsv = hexToHsv(normalizedColor);
-
         updateHsva(convertColor({ type: 'hex', value: result.sRGBHex }, 'hsva'), true);
       }
     } catch (error) {
