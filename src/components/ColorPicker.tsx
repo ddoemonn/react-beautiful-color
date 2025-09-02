@@ -180,7 +180,7 @@ interface CompoundEyeDropperProps {
   children?: React.ReactNode;
 }
 
-const CompoundEyeDropper = ({ className, size = 18, title = 'Pick color from screen', children }: CompoundEyeDropperProps) => {
+const CompoundEyeDropper = ({ className, title = 'Pick color from screen', children }: CompoundEyeDropperProps) => {
   const { handleEyeDropper } = useColorPickerContext();
 
   const [supported, setSupported] = useState(false);

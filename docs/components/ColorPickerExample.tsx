@@ -155,3 +155,39 @@ export function AlphaExample() {
     </div>
   );
 }
+
+export function EyeDropperExample() {
+  const [{ colorInput, colorState }, setColor] = useColorState({ type: 'hex', value: '#ff6b9d' });
+
+  return (
+    <div className="p-6">
+      <div className="max-w-md">
+        <h4 className="mb-3 text-sm font-medium">Eye Dropper</h4>
+        Selected Color: <span className="font-mono">{colorState.hex}</span>
+      </div>
+      <div className="flex items-center gap-4">
+        <ColorPicker
+          color={colorInput}
+          onChange={setColor}
+          className="h-10 w-10"
+        >
+          <ColorPicker.EyeDropper className="rounded-md bg-blue-600 p-1 hover:bg-blue-700">
+            <Pipette
+              size={20}
+              className="dark:text-white"
+            />
+          </ColorPicker.EyeDropper>
+        </ColorPicker>
+
+        <div className="my-4 text-sm">
+          <div className="mb-2">
+            <div
+              className="h-16 w-16 rounded border"
+              style={{ backgroundColor: colorState.hex }}
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}

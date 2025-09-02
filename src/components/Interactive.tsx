@@ -21,7 +21,6 @@ interface InteractiveProps {
   'aria-valuetext'?: string;
 }
 
-// Simple and reliable position calculation based on react-colorful approach
 const getRelativePosition = (element: HTMLElement, event: MouseEvent | TouchEvent): Interaction => {
   const rect = element.getBoundingClientRect();
 

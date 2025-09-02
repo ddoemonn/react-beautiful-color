@@ -1,0 +1,61 @@
+---
+title: EyeDropper
+description: Pick colors from anywhere on the screen using the browser's native eye dropper tool
+---
+
+import { EyeDropperExample } from '../../../components/ColorPickerExample';
+import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
+
+## Overview
+
+The `ColorPicker.EyeDropper` component lets users pick colors from anywhere on the screen using the browser's native eye dropper tool.
+
+## Basic Usage
+
+<Tabs items={['Preview', 'Code']}>
+  <Tab value="Preview">
+    <EyeDropperExample />
+  </Tab>
+  
+  <Tab value="Code">
+    ```tsx
+    import { ColorPicker, useColorState } from 'react-beautiful-color';
+    import { Pipette } from 'lucide-react';
+
+    export function EyeDropperExample() {
+      const [{ colorInput, colorState }, setColor] = useColorState({ 
+        type: 'hex', 
+        value: '#ff6b9d' 
+      });
+
+      return (
+        <div className="flex items-center gap-4">
+          <ColorPicker color={colorInput} onChange={setColor}>
+            <ColorPicker.EyeDropper>
+              <Pipette size={20} />
+            </ColorPicker.EyeDropper>
+          </ColorPicker>
+
+          {/* Show selected color */}
+          <div 
+            className="w-16 h-16 rounded border"
+            style={{ backgroundColor: colorState.hex }}
+          />
+        </div>
+      );
+    }
+    ```
+  </Tab>
+</Tabs>
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `className` | `string` | - | Additional CSS classes |
+| `title` | `string` | `"Pick color from screen"` | Tooltip text |
+| `children` | `React.ReactNode` | - | Icon or content |
+
+## Browser Support
+
+Only renders when the browser supports the EyeDropper API (Chrome 95+, Edge 95+, Safari 17+).
