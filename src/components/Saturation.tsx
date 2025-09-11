@@ -1,9 +1,9 @@
 import React, { useCallback } from 'react';
+import { HsvaColor } from '../types';
 import { cn } from '../utils';
 import { clamp, round } from '../utils/internal';
 import { Interaction, Interactive } from './Interactive';
 import { Pointer } from './Pointer';
-import { HsvaColor } from '../types';
 
 interface SaturationProps {
   hsva: HsvaColor;
@@ -39,17 +39,17 @@ export const Saturation: React.FC<SaturationProps> = ({ hsva, onChange, classNam
   const pureHue = `hsl(${hsva.h}, 100%, 50%)`;
 
   return (
-    <div className={cn('relative h-full w-full', className)}>
+    <div className={cn('relative h-full w-full rounded-xl', className)}>
       <Interactive
         onMove={handleMove}
         onMoveEnd={onFinishedUpdates}
         onKey={handleKey}
         aria-label="Color"
         aria-valuetext={`Saturation ${round(hsva.s)}%, Brightness ${round(hsva.v)}%`}
-        className="h-full w-full rounded-xl"
+        className="rounded-inherit h-full w-full"
       >
         <div
-          className="absolute inset-0 rounded-xl rounded-b-none"
+          className="rounded-inherit absolute inset-0 rounded-b-none"
           style={{
             backgroundColor: pureHue,
             backgroundImage: 'linear-gradient(to top, #000, rgba(0, 0, 0, 0)), linear-gradient(to right, #fff, rgba(255, 255, 255, 0))',
