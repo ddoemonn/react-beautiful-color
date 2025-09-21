@@ -82,7 +82,32 @@ export interface ColorPickerProps {
 }
 
 export class Color {
-  constructor(private color: ColorInput) {}
+  private color: ColorInput;
+  constructor(private colorInput: ColorInput | RgbaColor | RgbColor | HslColor | HslaColor | HsvColor | HsvaColor | string) {
+    if (typeof colorInput === 'string') {
+      this.color = { type: 'hex', value: colorInput };
+    } else if ('type' in colorInput) {
+      this.color = colorInput;
+    } else if ('r' in colorInput) {
+      if ('a' in colorInput) {
+        this.color = { type: 'rgba', ...colorInput };
+      } else {
+        this.color = { type: 'rgb', ...colorInput };
+      }
+    } else if ('v' in colorInput) {
+      if ('a' in colorInput) {
+        this.color = { type: 'hsva', ...colorInput };
+      } else {
+        this.color = { type: 'hsv', ...colorInput };
+      }
+    } else {
+      if ('a' in colorInput) {
+        this.color = { type: 'hsla', ...colorInput };
+      } else {
+        this.color = { type: 'hsl', ...colorInput };
+      }
+    }
+  }
   public getRgb(): RgbColor {
     return convertColor(this.color, 'rgb');
   }
