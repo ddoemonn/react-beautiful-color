@@ -2,8 +2,12 @@
 import './styles.css';
 
 export { ColorPicker } from './components/ColorPicker';
+export { ColorValue } from './components/ColorValue';
+export { Toast } from './components/Toast';
+export { ToastContainer } from './components/ToastContainer';
 
 export { useColorState } from './hooks/useColorState';
+export { useToast, useToastProvider } from './hooks/useToast';
 
 // Export color utilities for public use
 export * from './utils';
