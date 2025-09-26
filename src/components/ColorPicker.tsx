@@ -8,12 +8,17 @@ import { convertColor } from '../utils';
 import { Alpha } from './Alpha';
 import { Hue } from './Hue';
 import { Saturation } from './Saturation';
+import { ColorValue } from './ColorValue';
+import { ToastContainer } from './ToastContainer';
+import { useToastProvider } from '../hooks/useToast';
 
 interface ColorPickerContextType {
   hsva: HsvaColor;
   updateHsva: (params: Partial<HsvaColor>, finishedUpdates: boolean) => void;
   handleEyeDropper: () => void;
   onFinishedUpdates: () => void;
+  showToast: (message: string, type?: 'success' | 'error' | 'info', duration?: number) => void;
+  color: Color;
 }
 
 const ColorPickerContext = createContext<ColorPickerContextType | null>(null);
@@ -41,6 +46,7 @@ const ColorPickerMain = ({ color, onChange, className, children, defaultColor, .
   const [localColor, setLocalColor] = useState<Color>(getColor(color ?? defaultColor ?? { h: 340, s: 58, v: 100, a: 1, type: 'hsva' }));
   const updating = useRef(false);
   const colorRef = useRef(localColor);
+  const { toasts, showToast, hideToast, ToastContext } = useToastProvider();
 
   useEffect(() => {
     if (!updating.current && color) {
@@ -80,24 +86,29 @@ const ColorPickerMain = ({ color, onChange, className, children, defaultColor, .
     } catch (error) {
       console.log('EyeDropper cancelled or failed:', error);
     }
-  }, [onChange]);
+  }, [updateHsva]);
 
   const contextValue: ColorPickerContextType = {
     hsva: localColor.getHsva(),
     updateHsva,
     handleEyeDropper,
     onFinishedUpdates,
+    showToast,
+    color: localColor,
   };
 
   return (
-    <ColorPickerContext.Provider value={contextValue}>
-      <div
-        {...rest}
-        className={cn('relative flex h-[280px] w-[280px] cursor-default flex-col rounded-2xl bg-white shadow-lg select-none', className)}
-      >
-        {children}
-      </div>
-    </ColorPickerContext.Provider>
+    <ToastContext.Provider value={{ toasts, showToast, hideToast }}>
+      <ColorPickerContext.Provider value={contextValue}>
+        <div
+          {...rest}
+          className={cn('relative flex h-[280px] w-[280px] cursor-default flex-col rounded-2xl bg-white shadow-lg select-none', className)}
+        >
+          {children}
+        </div>
+        <ToastContainer />
+      </ColorPickerContext.Provider>
+    </ToastContext.Provider>
   );
 };
 
@@ -204,9 +215,45 @@ const CompoundEyeDropper = ({ className, title = 'Pick color from screen', child
   );
 };
 
+interface CompoundColorValuesProps {
+  className?: string;
+  formats?: Array<'hex' | 'rgb' | 'rgba' | 'hsl' | 'hsla'>;
+}
+
+const CompoundColorValues = ({ className, formats = ['hex', 'rgb', 'hsl'] }: CompoundColorValuesProps) => {
+  const { color, showToast } = useColorPickerContext();
+
+  const handleCopy = useCallback(
+    (value: string) => {
+      showToast(`Copied ${value} to clipboard!`, 'success');
+    },
+    [showToast]
+  );
+
+  const colorValues = formats.map(format => {
+    const value = color.format(format);
+    const label = format.toUpperCase();
+    return { value, label, format };
+  });
+
+  return (
+    <div className={cn('space-y-2', className)}>
+      {colorValues.map(({ value, label, format }) => (
+        <ColorValue
+          key={format}
+          value={value}
+          label={label}
+          onCopy={handleCopy}
+        />
+      ))}
+    </div>
+  );
+};
+
 export const ColorPicker = Object.assign(ColorPickerMain, {
   Saturation: CompoundSaturation,
   Hue: CompoundHue,
   Alpha: CompoundAlpha,
   EyeDropper: CompoundEyeDropper,
+  ColorValues: CompoundColorValues,
 });
