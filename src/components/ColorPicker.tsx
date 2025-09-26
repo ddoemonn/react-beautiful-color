@@ -8,6 +8,7 @@ import { convertColor } from '../utils';
 import { Alpha } from './Alpha';
 import { Hue } from './Hue';
 import { Saturation } from './Saturation';
+import { ColorInput as ColorInputComponent, type ColorInputProps } from './ColorInput';
 
 interface ColorPickerContextType {
   hsva: HsvaColor;
@@ -80,7 +81,7 @@ const ColorPickerMain = ({ color, onChange, className, children, defaultColor, .
     } catch (error) {
       console.log('EyeDropper cancelled or failed:', error);
     }
-  }, [onChange]);
+  }, [updateHsva]);
 
   const contextValue: ColorPickerContextType = {
     hsva: localColor.getHsva(),
@@ -204,9 +205,37 @@ const CompoundEyeDropper = ({ className, title = 'Pick color from screen', child
   );
 };
 
+interface CompoundColorInputProps extends Omit<ColorInputProps, 'value' | 'onChange'> {
+  className?: string;
+}
+
+const CompoundColorInput = ({ className, ...props }: CompoundColorInputProps) => {
+  const { hsva, updateHsva } = useColorPickerContext();
+
+  const handleColorChange = useCallback(
+    (color: Color) => {
+      const newHsva = color.getHsva();
+      updateHsva(newHsva, true);
+    },
+    [updateHsva]
+  );
+
+  const currentColor = new Color({ type: 'hsva', ...hsva });
+
+  return (
+    <ColorInputComponent
+      value={currentColor}
+      onChange={handleColorChange}
+      className={className}
+      {...props}
+    />
+  );
+};
+
 export const ColorPicker = Object.assign(ColorPickerMain, {
   Saturation: CompoundSaturation,
   Hue: CompoundHue,
   Alpha: CompoundAlpha,
   EyeDropper: CompoundEyeDropper,
+  Input: CompoundColorInput,
 });

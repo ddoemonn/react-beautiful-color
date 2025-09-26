@@ -2,6 +2,7 @@
 import './styles.css';
 
 export { ColorPicker } from './components/ColorPicker';
+export { ColorInput } from './components/ColorInput';
 
 export { useColorState } from './hooks/useColorState';
 
@@ -9,6 +10,9 @@ export { useColorState } from './hooks/useColorState';
 export * from './utils';
 
 export type { ColorFormat, ColorPickerProps, HexColor, HslaColor, HslColor, HsvaColor, HsvColor, RgbaColor, RgbColor } from './types';
+export type { ColorInputProps } from './components/ColorInput';
+export type { ColorValidationResult } from './utils/internal';
+export { validateAndParseColor } from './utils/internal';
 
 export { Color } from './types';
 
