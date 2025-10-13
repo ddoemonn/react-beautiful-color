@@ -148,6 +148,59 @@ export default function Layout({ children }: LayoutProps<'/'>) {
       className={`${geistSans.variable} ${geistMono.variable} ${spaceGrotesk.variable} ${inter.variable} ${jetbrains.variable} ${orbitron.variable} ${pacifico.variable}`}
       suppressHydrationWarning
     >
+      <head>
+        <title>React Beautiful Color - Flexible Color Picker for React</title>
+        <meta
+          name="description"
+          content="The most flexible and beautiful color picker for React. Built with compound components for maximum customization."
+        />
+
+        <meta
+          property="og:url"
+          content="https://www.react-beautiful-color.dev/"
+        />
+        <meta
+          property="og:type"
+          content="website"
+        />
+        <meta
+          property="og:title"
+          content="React Beautiful Color - Flexible Color Picker for React"
+        />
+        <meta
+          property="og:description"
+          content="The most flexible and beautiful color picker for React. Built with compound components for maximum customization."
+        />
+        <meta
+          property="og:image"
+          content="https://opengraph.b-cdn.net/production/images/ba886231-d62d-43fd-a3f8-412dbf362c0d.png?token=M3RIR3xEo5hv0yfSfuWN9kSIItyy-8EPGG5NNcGaavc&height=600&width=1200&expires=33296355471"
+        />
+
+        <meta
+          name="twitter:card"
+          content="summary_large_image"
+        />
+        <meta
+          property="twitter:domain"
+          content="react-beautiful-color.dev"
+        />
+        <meta
+          property="twitter:url"
+          content="https://www.react-beautiful-color.dev/"
+        />
+        <meta
+          name="twitter:title"
+          content="React Beautiful Color - Flexible Color Picker for React"
+        />
+        <meta
+          name="twitter:description"
+          content="The most flexible and beautiful color picker for React. Built with compound components for maximum customization."
+        />
+        <meta
+          name="twitter:image"
+          content="https://opengraph.b-cdn.net/production/images/ba886231-d62d-43fd-a3f8-412dbf362c0d.png?token=M3RIR3xEo5hv0yfSfuWN9kSIItyy-8EPGG5NNcGaavc&height=600&width=1200&expires=33296355471"
+        />
+      </head>
       <body className="flex min-h-screen flex-col">
         <RootProvider>{children}</RootProvider>
       </body>
