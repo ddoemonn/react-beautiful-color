@@ -103,7 +103,7 @@ export const metadata: Metadata = {
     siteName: 'React Beautiful Color',
     images: [
       {
-        url: 'og-image.jpeg',
+        url: '/api/og',
         width: 1200,
         height: 630,
         alt: 'React Beautiful Color - Color Picker Component',
@@ -114,7 +114,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'React Beautiful Color - Flexible Color Picker for React',
     description: 'The most flexible and beautiful color picker for React. Built with compound components for maximum customization.',
-    images: ['og-image.jpeg'],
+    images: ['/api/og'],
     creator: '@ddoemonn',
   },
   robots: {
