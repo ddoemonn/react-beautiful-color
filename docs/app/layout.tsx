@@ -94,29 +94,6 @@ export const metadata: Metadata = {
   alternates: {
     canonical: '/',
   },
-  openGraph: {
-    type: 'website',
-    locale: 'en_US',
-    url: 'https://react-beautiful-color.vercel.app',
-    title: 'React Beautiful Color - Flexible Color Picker for React',
-    description: 'The most flexible and beautiful color picker for React. Built with compound components for maximum customization.',
-    siteName: 'React Beautiful Color',
-    images: [
-      {
-        url: '/api/og',
-        width: 1200,
-        height: 630,
-        alt: 'React Beautiful Color - Color Picker Component',
-      },
-    ],
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'React Beautiful Color - Flexible Color Picker for React',
-    description: 'The most flexible and beautiful color picker for React. Built with compound components for maximum customization.',
-    images: ['/api/og'],
-    creator: '@ddoemonn',
-  },
   robots: {
     index: true,
     follow: true,
