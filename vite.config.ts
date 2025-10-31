@@ -4,7 +4,11 @@ import { resolve } from 'path';
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [react()],
+  plugins: [
+    react({
+      jsxRuntime: 'automatic',
+    }),
+  ],
   build: {
     lib: {
       entry: resolve(__dirname, 'src/index.ts'),
@@ -13,11 +17,13 @@ export default defineConfig({
       fileName: format => `index.${format === 'es' ? 'mjs' : 'js'}`,
     },
     rollupOptions: {
-      external: ['react', 'react-dom', 'lucide-react'],
+      external: ['react', 'react-dom', 'react/jsx-runtime', 'react/jsx-dev-runtime', 'lucide-react'],
       output: {
         globals: {
           react: 'React',
           'react-dom': 'ReactDOM',
+          'react/jsx-runtime': 'react/jsx-runtime',
+          'react/jsx-dev-runtime': 'react/jsx-dev-runtime',
           'lucide-react': 'LucideReact',
         },
       },
