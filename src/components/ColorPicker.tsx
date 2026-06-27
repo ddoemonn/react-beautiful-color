@@ -1,10 +1,7 @@
 import React, { createContext, useCallback, useContext, useEffect, useRef, useState } from 'react';
 
-import type { ColorInput, ColorPickerProps, HsvaColor } from '../types';
-import { Color } from '../types';
-import { cn } from '../utils';
-
-import { convertColor } from '../utils';
+import { Color, type ColorInput, type ColorPickerProps, type HsvaColor } from '../types';
+import { cn, convertColor } from '../utils';
 import { Alpha } from './Alpha';
 import { Hue } from './Hue';
 import { Saturation } from './Saturation';
