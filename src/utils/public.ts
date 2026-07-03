@@ -1,5 +1,15 @@
-import type { ColorFormat, ColorInput, HexColor, HslaColor, HslColor, HsvaColor, HsvColor, RgbaColor, RgbColor } from '../types';
-import { Color } from '../types';
+import {
+  Color,
+  type ColorFormat,
+  type ColorInput,
+  type HexColor,
+  type HslaColor,
+  type HslColor,
+  type HsvaColor,
+  type HsvColor,
+  type RgbaColor,
+  type RgbColor,
+} from '../types';
 import { assertUnreachable } from './internal';
 
 const clamp = (num: number, min: number, max: number): number => Math.min(Math.max(num, min), max);
